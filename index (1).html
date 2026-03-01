@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Attie — Digital Law Office</title>
+  <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Fredoka+One&family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --black: #080808; --white: #f5f5f0; --green: #00ff87; --green-dim: #00c96a;
+      --gold: #c9a84c; --gray: #1a1a1a; --text-muted: #888;
+    }
+    html { scroll-behavior: smooth; }
+    body { background: var(--black); color: var(--white); font-family: 'DM Sans', sans-serif; font-weight: 300; overflow-x: hidden; }
+    body::before {
+      content: ''; position: fixed; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none; z-index: 999; opacity: 0.4;
+    }
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 1.2rem 3rem; background: rgba(8,8,8,0.85);
+      backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .nav-logo {
+      font-family: 'Pacifico', cursive; font-size: 1.5rem;
+      background: linear-gradient(135deg, var(--green), var(--gold));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .nav-links { display: flex; gap: 2rem; list-style: none; }
+    .nav-links a { color: var(--text-muted); text-decoration: none; font-size: 0.8rem; letter-spacing: 0.1em; text-transform: uppercase; transition: color 0.3s; }
+    .nav-links a:hover { color: var(--green); }
+    .scroll-line { position: fixed; top: 0; left: 0; height: 3px; background: linear-gradient(90deg, var(--green), var(--gold)); z-index: 200; width: 0%; transition: width 0.1s; }
+
+    /* HERO */
+    .hero { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 8rem 2rem 4rem; position: relative; overflow: hidden; }
+    .hero::before { content: ''; position: absolute; width: 700px; height: 700px; border-radius: 50%; background: radial-gradient(circle, rgba(0,255,135,0.07) 0%, transparent 70%); top: 50%; left: 50%; transform: translate(-50%, -50%); pointer-events: none; }
+    .hero-eyebrow { font-family: 'Fredoka One', cursive; font-size: 0.8rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--green); margin-bottom: 1.5rem; opacity: 0; animation: fadeUp 0.8s 0.2s forwards; }
+    .hero-title { font-family: 'Pacifico', cursive; font-size: clamp(3.5rem, 10vw, 8rem); line-height: 1; background: linear-gradient(135deg, var(--green) 0%, #00e0ff 50%, var(--gold) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 1rem; opacity: 0; animation: fadeUp 0.8s 0.4s forwards; }
+    .hero-subtitle { font-family: 'Fredoka One', cursive; font-size: clamp(1rem, 2.5vw, 1.4rem); color: var(--text-muted); letter-spacing: 0.08em; margin-bottom: 2.5rem; opacity: 0; animation: fadeUp 0.8s 0.6s forwards; }
+    .hero-statement { max-width: 680px; font-size: clamp(1.1rem, 2vw, 1.35rem); line-height: 1.75; color: var(--white); margin-bottom: 1.5rem; opacity: 0; animation: fadeUp 0.8s 0.8s forwards; }
+    .hero-statement em { color: var(--green); font-style: normal; font-weight: 500; }
+    .hero-substatement { max-width: 600px; font-size: 0.95rem; line-height: 1.8; color: var(--text-muted); margin-bottom: 3rem; opacity: 0; animation: fadeUp 0.8s 1s forwards; }
+    .hero-cta { display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; opacity: 0; animation: fadeUp 0.8s 1.2s forwards; }
+    .btn-primary { background: var(--green); color: var(--black); border: none; padding: 1rem 2.5rem; font-family: 'Fredoka One', cursive; font-size: 1.05rem; letter-spacing: 0.05em; border-radius: 4px; cursor: pointer; transition: all 0.3s; text-decoration: none; display: inline-block; }
+    .btn-primary:hover { background: var(--green-dim); transform: translateY(-2px); box-shadow: 0 8px 30px rgba(0,255,135,0.25); }
+    .btn-secondary { background: transparent; color: var(--white); border: 1px solid rgba(255,255,255,0.2); padding: 1rem 2.5rem; font-family: 'Fredoka One', cursive; font-size: 1.05rem; letter-spacing: 0.05em; border-radius: 4px; cursor: pointer; transition: all 0.3s; text-decoration: none; display: inline-block; }
+    .btn-secondary:hover { border-color: var(--green); color: var(--green); transform: translateY(-2px); }
+
+    /* SECTIONS */
+    section { padding: 6rem 2rem; max-width: 1100px; margin: 0 auto; }
+    .divider { width: 60px; height: 2px; background: linear-gradient(90deg, var(--green), transparent); margin: 0 auto 4rem; }
+    .section-label { font-family: 'Fredoka One', cursive; font-size: 0.75rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--green); margin-bottom: 1rem; }
+    .section-title { font-family: 'DM Serif Display', serif; font-size: clamp(2rem, 4vw, 3rem); line-height: 1.2; margin-bottom: 1.5rem; color: var(--white); }
+    .section-title em { font-style: italic; color: var(--green); }
+    .section-body { font-size: 1rem; line-height: 1.9; color: var(--text-muted); max-width: 620px; }
+
+    /* PROBLEM */
+    .problem { border-left: 2px solid var(--green); padding-left: 2rem; margin: 4rem 0; }
+    .problem-quote { font-family: 'DM Serif Display', serif; font-size: clamp(1.3rem, 3vw, 2rem); font-style: italic; line-height: 1.6; color: var(--white); margin-bottom: 1rem; }
+    .problem-quote span { color: var(--green); font-style: normal; }
+
+    /* TRUST */
+    .trust-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 2rem; margin-top: 3rem; }
+    .trust-item { display: flex; gap: 1rem; align-items: flex-start; }
+    .trust-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green); margin-top: 0.4rem; flex-shrink: 0; }
+    .trust-text h4 { font-family: 'Fredoka One', cursive; font-size: 0.95rem; color: var(--white); margin-bottom: 0.3rem; letter-spacing: 0.03em; }
+    .trust-text p { font-size: 0.85rem; color: var(--text-muted); line-height: 1.7; }
+
+    /* AREAS */
+    .areas { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-top: 3rem; }
+    .area-card { background: var(--gray); border: 1px solid rgba(255,255,255,0.06); border-radius: 6px; padding: 1.5rem; transition: all 0.3s; position: relative; overflow: hidden; }
+    .area-card::before { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, var(--green), transparent); transform: scaleX(0); transform-origin: left; transition: transform 0.3s; }
+    .area-card:hover::before { transform: scaleX(1); }
+    .area-card:hover { border-color: rgba(0,255,135,0.2); transform: translateY(-3px); }
+    .area-icon { font-size: 1.5rem; margin-bottom: 0.75rem; }
+    .area-title { font-family: 'Fredoka One', cursive; font-size: 1rem; color: var(--white); margin-bottom: 0.5rem; letter-spacing: 0.03em; }
+    .area-desc { font-size: 0.8rem; color: var(--text-muted); line-height: 1.6; }
+
+    /* HOW IT WORKS */
+    .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; margin-top: 3rem; }
+    .step { background: var(--gray); border: 1px solid rgba(255,255,255,0.06); border-radius: 8px; padding: 2rem; transition: border-color 0.3s, transform 0.3s; }
+    .step:hover { border-color: rgba(0,255,135,0.3); transform: translateY(-4px); }
+    .step-number { font-family: 'Pacifico', cursive; font-size: 3rem; background: linear-gradient(135deg, var(--green), var(--gold)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; line-height: 1; margin-bottom: 1rem; }
+    .step-title { font-family: 'Fredoka One', cursive; font-size: 1.15rem; color: var(--white); margin-bottom: 0.75rem; letter-spacing: 0.03em; }
+    .step-body { font-size: 0.9rem; line-height: 1.8; color: var(--text-muted); }
+
+    /* QUERY FORM */
+    .query-section { background: var(--gray); border: 1px solid rgba(0,255,135,0.15); border-radius: 16px; overflow: hidden; margin-top: 3rem; }
+    .query-header { background: rgba(0,255,135,0.05); border-bottom: 1px solid rgba(0,255,135,0.1); padding: 1.5rem 2rem; display: flex; align-items: center; gap: 1rem; }
+    .query-header-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--green); box-shadow: 0 0 8px rgba(0,255,135,0.5); }
+    .query-header-title { font-family: 'Fredoka One', cursive; font-size: 1rem; color: var(--white); letter-spacing: 0.05em; }
+    .query-header-sub { font-size: 0.78rem; color: var(--text-muted); margin-left: auto; }
+    .query-body { padding: 2.5rem 2rem; }
+    .progress-bar { height: 3px; background: rgba(255,255,255,0.06); border-radius: 2px; margin-bottom: 2rem; overflow: hidden; }
+    .progress-fill { height: 100%; background: linear-gradient(90deg, var(--green), var(--gold)); border-radius: 2px; transition: width 0.5s ease; }
+    .progress-label { font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.5rem; font-family: 'Fredoka One', cursive; letter-spacing: 0.1em; text-transform: uppercase; }
+    .form-step { display: none; }
+    .form-step.active { display: block; animation: fadeUp 0.4s forwards; }
+    .form-question { font-family: 'DM Serif Display', serif; font-size: clamp(1.2rem, 2.5vw, 1.6rem); color: var(--white); margin-bottom: 0.5rem; line-height: 1.4; }
+    .form-note { font-size: 0.82rem; color: var(--text-muted); margin-bottom: 1.5rem; line-height: 1.7; font-style: italic; }
+    .form-input, .form-textarea { width: 100%; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; padding: 1rem 1.2rem; color: var(--white); font-family: 'DM Sans', sans-serif; font-size: 0.95rem; outline: none; transition: border-color 0.3s; margin-bottom: 1rem; }
+    .form-input:focus, .form-textarea:focus { border-color: var(--green); }
+    .form-textarea { resize: vertical; min-height: 120px; line-height: 1.7; }
+    .choices { display: flex; flex-direction: column; gap: 0.75rem; margin-bottom: 1.5rem; }
+    .choice-btn { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; padding: 0.9rem 1.2rem; color: var(--text-muted); font-family: 'DM Sans', sans-serif; font-size: 0.9rem; cursor: pointer; text-align: left; transition: all 0.2s; }
+    .choice-btn:hover, .choice-btn.selected { border-color: var(--green); color: var(--white); background: rgba(0,255,135,0.05); }
+    .form-nav { display: flex; gap: 1rem; margin-top: 1.5rem; align-items: center; }
+    .btn-next { background: var(--green); color: var(--black); border: none; padding: 0.9rem 2rem; font-family: 'Fredoka One', cursive; font-size: 1rem; letter-spacing: 0.05em; border-radius: 4px; cursor: pointer; transition: all 0.3s; }
+    .btn-next:hover { background: var(--green-dim); transform: translateY(-2px); }
+    .btn-next:disabled { background: #333; color: #666; cursor: not-allowed; transform: none; }
+    .btn-back { background: transparent; color: var(--text-muted); border: 1px solid rgba(255,255,255,0.1); padding: 0.9rem 1.5rem; font-family: 'Fredoka One', cursive; font-size: 1rem; border-radius: 4px; cursor: pointer; transition: all 0.3s; }
+    .btn-back:hover { border-color: var(--text-muted); color: var(--white); }
+
+    /* DOC ATTACH */
+    .doc-attach-box { border: 1px dashed rgba(0,255,135,0.25); border-radius: 8px; padding: 1.5rem; margin-bottom: 1rem; text-align: center; }
+    .doc-attach-box p { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem; line-height: 1.7; }
+    .btn-attach { display: inline-block; background: transparent; color: var(--green); border: 1px solid rgba(0,255,135,0.4); padding: 0.7rem 1.5rem; font-family: 'Fredoka One', cursive; font-size: 0.9rem; border-radius: 4px; cursor: pointer; text-decoration: none; transition: all 0.3s; }
+    .btn-attach:hover { background: rgba(0,255,135,0.08); }
+
+    /* CHECKBOX */
+    .checkbox-block { background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; padding: 1.5rem; margin-bottom: 1.5rem; }
+    .checkbox-block h4 { font-family: 'Fredoka One', cursive; font-size: 0.9rem; color: var(--white); margin-bottom: 1rem; letter-spacing: 0.05em; }
+    .checkbox-block ul { list-style: none; display: flex; flex-direction: column; gap: 0.75rem; margin-bottom: 1.5rem; }
+    .checkbox-block ul li { font-size: 0.82rem; color: var(--text-muted); line-height: 1.7; padding-left: 1.2rem; position: relative; }
+    .checkbox-block ul li::before { content: '—'; position: absolute; left: 0; color: var(--green); }
+    .checkbox-block ul li strong { color: var(--white); }
+    .checkbox-agree { display: flex; align-items: flex-start; gap: 0.75rem; cursor: pointer; }
+    .checkbox-agree input[type="checkbox"] { width: 18px; height: 18px; accent-color: var(--green); cursor: pointer; flex-shrink: 0; margin-top: 2px; }
+    .checkbox-agree span { font-size: 0.85rem; color: var(--white); line-height: 1.6; }
+
+    /* SUCCESS */
+    .form-success { display: none; text-align: center; padding: 2rem 0; }
+    .success-icon { font-size: 3rem; margin-bottom: 1rem; }
+    .success-title { font-family: 'DM Serif Display', serif; font-size: 1.8rem; color: var(--white); margin-bottom: 1rem; }
+    .success-body { font-size: 0.9rem; color: var(--text-muted); line-height: 1.8; max-width: 480px; margin: 0 auto; }
+    .success-body em { color: var(--green); font-style: normal; }
+
+    /* FEES */
+    .fees-box { background: var(--gray); border: 1px solid rgba(255,255,255,0.06); border-radius: 12px; padding: 2.5rem; margin-top: 3rem; position: relative; overflow: hidden; }
+    .fees-box::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, var(--green), var(--gold)); }
+    .fee-range { font-family: 'Pacifico', cursive; font-size: clamp(2rem, 5vw, 3.5rem); background: linear-gradient(135deg, var(--green), var(--gold)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 1rem; }
+    .fee-note { font-size: 0.9rem; color: var(--text-muted); line-height: 1.8; max-width: 600px; }
+    .fee-note strong { color: var(--white); }
+
+    /* RESPONSE TIME */
+    .response-box { background: var(--gray); border: 1px solid rgba(201,168,76,0.15); border-radius: 12px; padding: 2.5rem; margin-top: 3rem; position: relative; overflow: hidden; }
+    .response-box::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, var(--gold), transparent); }
+    .response-times { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.5rem; margin: 2rem 0; }
+    .response-time-item { background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06); border-radius: 8px; padding: 1.5rem; }
+    .response-time-label { font-family: 'Fredoka One', cursive; font-size: 0.75rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.5rem; }
+    .response-time-value { font-family: 'DM Serif Display', serif; font-size: 1.6rem; color: var(--white); margin-bottom: 0.5rem; }
+    .response-time-value.standard { color: var(--green); }
+    .response-time-value.urgent { color: var(--gold); }
+    .response-time-desc { font-size: 0.8rem; color: var(--text-muted); line-height: 1.6; }
+    .response-emphasis { font-size: 0.88rem; color: var(--text-muted); line-height: 1.8; border-top: 1px solid rgba(255,255,255,0.06); padding-top: 1.5rem; }
+    .response-emphasis strong { color: var(--green); }
+
+    /* DISCLAIMER */
+    .disclaimer { background: rgba(201,168,76,0.05); border: 1px solid rgba(201,168,76,0.15); border-radius: 8px; padding: 1.5rem 2rem; margin-top: 4rem; }
+    .disclaimer p { font-size: 0.8rem; color: var(--text-muted); line-height: 1.8; text-align: center; }
+    .disclaimer strong { color: var(--gold); }
+
+    /* FOOTER */
+    footer { border-top: 1px solid rgba(255,255,255,0.06); padding: 3rem 2rem; text-align: center; }
+    .footer-logo { font-family: 'Pacifico', cursive; font-size: 2rem; background: linear-gradient(135deg, var(--green), var(--gold)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 0.5rem; }
+    .footer-tagline { font-family: 'Fredoka One', cursive; font-size: 0.8rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 2rem; }
+    .footer-links { display: flex; gap: 2rem; justify-content: center; list-style: none; margin-bottom: 2rem; flex-wrap: wrap; }
+    .footer-links a { color: var(--text-muted); text-decoration: none; font-size: 0.8rem; letter-spacing: 0.08em; text-transform: uppercase; transition: color 0.3s; }
+    .footer-links a:hover { color: var(--green); }
+    .footer-copy { font-size: 0.75rem; color: rgba(136,136,136,0.5); }
+
+    /* ANIMATIONS */
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+    .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.7s ease, transform 0.7s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    @media (max-width: 768px) {
+      nav { padding: 1rem 1.5rem; }
+      .nav-links { display: none; }
+      section { padding: 4rem 1.5rem; }
+      .query-body { padding: 1.5rem; }
+      .query-header { padding: 1rem 1.5rem; }
+      .query-header-sub { display: none; }
+      .fees-box, .response-box { padding: 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="scroll-line" id="scrollLine"></div>
+
+  <nav>
+    <div class="nav-logo">Attie</div>
+    <ul class="nav-links">
+      <li><a href="#different">Why Attie</a></li>
+      <li><a href="#areas">Practice Areas</a></li>
+      <li><a href="#query">Submit a Query</a></li>
+      <li><a href="#fees">Fees</a></li>
+    </ul>
+  </nav>
+
+  <!-- 1. HERO -->
+  <div class="hero">
+    <p class="hero-eyebrow">Philippine Digital Law Office</p>
+    <h1 class="hero-title">Attie</h1>
+    <p class="hero-subtitle">Your Legal Question Deserves a Real Answer</p>
+    <p class="hero-statement">We are in the age of AI. Getting <em>legal guidance</em> should not depend on whether your question gets picked on a TV segment.</p>
+    <p class="hero-substatement">For too long, Filipinos needing legal help were limited to waiting in line at legal aid offices, hoping to catch a free advice segment on radio, or simply going without — because they could not afford a retainer. That gap ends here.</p>
+    <div class="hero-cta">
+      <a href="#query" class="btn-primary">Submit a Query</a>
+      <a href="#different" class="btn-secondary">Learn More</a>
+    </div>
+  </div>
+
+  <!-- 2. PROBLEM STATEMENT -->
+  <section>
+    <div class="divider"></div>
+    <div class="problem reveal">
+      <p class="problem-quote">"Your legal rights do not disappear because you cannot afford a lawyer. <span>Attie exists to close that gap.</span>"</p>
+      <p class="section-body">Attie is a Philippine digital law office. Submit your concern and receive a response that is AI-assisted and reviewed by a licensed Filipino lawyer — accessible, affordable, and fully online. No office visit. No retainer. No waiting room.</p>
+    </div>
+  </section>
+
+  <!-- 3. WHAT MAKES IT DIFFERENT -->
+  <section id="different">
+    <p class="section-label reveal">Why Attie</p>
+    <h2 class="section-title reveal">What Makes This <em>Different</em></h2>
+    <div class="trust-grid">
+      <div class="trust-item reveal">
+        <div class="trust-dot"></div>
+        <div class="trust-text">
+          <h4>Not AI Alone — Lawyer Reviewed</h4>
+          <p>Every response is reviewed and approved by a licensed Filipino lawyer before it reaches you. AI assists the research. A lawyer decides the answer.</p>
+        </div>
+      </div>
+      <div class="trust-item reveal">
+        <div class="trust-dot"></div>
+        <div class="trust-text">
+          <h4>Your Identity Is Protected</h4>
+          <p>You may remain anonymous. Use a nickname or alias. Your information is never shared with anyone outside of Attie.</p>
+        </div>
+      </div>
+      <div class="trust-item reveal">
+        <div class="trust-dot"></div>
+        <div class="trust-text">
+          <h4>No Retainer Required</h4>
+          <p>Pay only for what you need. No monthly fees, no hidden charges, no office visits required.</p>
+        </div>
+      </div>
+      <div class="trust-item reveal">
+        <div class="trust-dot"></div>
+        <div class="trust-text">
+          <h4>Grounded in Philippine Law</h4>
+          <p>Our AI is trained specifically on Philippine statutes, Rules of Court, and jurisprudence — not generic legal information.</p>
+        </div>
+      </div>
+      <div class="trust-item reveal">
+        <div class="trust-dot"></div>
+        <div class="trust-text">
+          <h4>English and Filipino</h4>
+          <p>You may communicate in English or Filipino. We work in whichever language you are most comfortable with.</p>
+        </div>
+      </div>
+      <div class="trust-item reveal">
+        <div class="trust-dot"></div>
+        <div class="trust-text">
+          <h4>Steers You in the Right Direction</h4>
+          <p>Attie's purpose is to give you the legal information you need to make informed decisions — not to replace a lawyer, but to help you understand where you stand.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. PRACTICE AREAS -->
+  <section id="areas">
+    <p class="section-label reveal">What We Cover</p>
+    <h2 class="section-title reveal">Practice <em>Areas</em></h2>
+    <p class="section-body reveal">Not sure which category your concern falls under? Don't worry. Just describe your situation and we will figure it out.</p>
+    <div class="areas">
+      <div class="area-card reveal"><div class="area-icon">⚖️</div><div class="area-title">Civil</div><p class="area-desc">Contracts, property disputes, inheritance, family law, annulment, legal separation.</p></div>
+      <div class="area-card reveal"><div class="area-icon">🔒</div><div class="area-title">Criminal</div><p class="area-desc">Filing complaints, charges, arrest rights, bail, criminal procedure.</p></div>
+      <div class="area-card reveal"><div class="area-icon">💼</div><div class="area-title">Labor & Employment</div><p class="area-desc">Illegal dismissal, unpaid wages, NLRC filing, employment contracts.</p></div>
+      <div class="area-card reveal"><div class="area-icon">🏢</div><div class="area-title">Corporate & Business</div><p class="area-desc">Business registration, partnership disputes, contracts, SEC matters.</p></div>
+      <div class="area-card reveal"><div class="area-icon">🏛️</div><div class="area-title">Court Procedure</div><p class="area-desc">How to file cases, deadlines, small claims, court processes and requirements.</p></div>
+      <div class="area-card reveal"><div class="area-icon">📋</div><div class="area-title">Government & Administrative</div><p class="area-desc">Government permits, administrative complaints, agency processes.</p></div>
+    </div>
+  </section>
+
+  <!-- 5. HOW IT WORKS -->
+  <section id="how">
+    <p class="section-label reveal">The Process</p>
+    <h2 class="section-title reveal">How <em>Attie</em> Works</h2>
+    <p class="section-body reveal">Three steps. No office visit. No retainer required.</p>
+    <div class="steps">
+      <div class="step reveal">
+        <div class="step-number">1</div>
+        <div class="step-title">Submit Your Query</div>
+        <p class="step-body">Fill out the query form below. Tell us what happened, who is involved, where, and when. No legal terms needed — just share what you truthfully know.</p>
+      </div>
+      <div class="step reveal">
+        <div class="step-number">2</div>
+        <div class="step-title">We Review Your Concern</div>
+        <p class="step-body">Your query is processed using AI trained on Philippine law, then reviewed and finalized by a licensed Filipino lawyer. You receive a real, considered answer — not a raw AI output.</p>
+      </div>
+      <div class="step reveal">
+        <div class="step-number">3</div>
+        <div class="step-title">Receive Your Response</div>
+        <p class="step-body">Your lawyer-reviewed response is sent to your email. Clear, practical, and grounded in Philippine law — designed to steer you in the right direction.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. GET STARTED / QUERY FORM -->
+  <section id="query">
+    <p class="section-label reveal">Get Started</p>
+    <h2 class="section-title reveal">Submit Your <em>Query</em></h2>
+    <p class="section-body reveal">Answer the questions below as best as you can. You don't need to know legal terms. Just share what you truthfully know. Your response will be sent to your email.</p>
+
+    <div class="query-section reveal">
+      <div class="query-header">
+        <div class="query-header-dot"></div>
+        <div class="query-header-title">Attie — Legal Query Form</div>
+        <div class="query-header-sub">All information is kept strictly confidential</div>
+      </div>
+      <div class="query-body">
+        <div class="progress-label" id="progressLabel">Step 1 of 9</div>
+        <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:11%"></div></div>
+
+        <form id="queryForm" action="https://api.web3forms.com/submit" method="POST">
+          <input type="hidden" name="access_key" value="eae0e5e3-8b39-40a7-af14-b5b46a1b4aa3">
+          <input type="hidden" name="subject" value="New Attie Legal Query Submission">
+          <input type="hidden" name="redirect" value="false">
+          <input type="hidden" name="concern_type" id="hidden_concern">
+          <input type="hidden" name="urgency" id="hidden_urgency">
+          <input type="hidden" name="anonymous" id="hidden_anonymous">
+          <input type="hidden" name="ongoing_status" id="hidden_ongoing">
+
+          <!-- STEP 1: Concern type -->
+          <div class="form-step active" id="step1">
+            <p class="form-question">What is your legal concern about?<br><em style="font-family:'DM Sans';font-size:0.9rem;color:var(--text-muted);">Ano ang iyong legal na alalahanin?</em></p>
+            <p class="form-note">Not sure? Pick the closest one or select "I'm not sure." — Hindi sigurado? Piliin ang pinakamalapit o "Hindi ako sigurado."</p>
+            <div class="choices" id="concern-choices">
+              <button type="button" class="choice-btn" data-value="Civil — contracts, property, inheritance, family">⚖️ Civil — contracts, property, inheritance, family / kontrata, ari-arian, mana, pamilya</button>
+              <button type="button" class="choice-btn" data-value="Criminal — complaint, charges, arrest, threat">🔒 Criminal — complaint, charges, arrest, threat / reklamo, kaso, pagaaresto, pagbabanta</button>
+              <button type="button" class="choice-btn" data-value="Labor / Employment — dismissal, unpaid wages, contracts">💼 Labor / Employment — dismissal, unpaid wages / tanggal sa trabaho, hindi bayad na sahod</button>
+              <button type="button" class="choice-btn" data-value="Corporate / Business — registration, disputes, partnerships">🏢 Corporate / Business — registration, disputes / rehistrasyon, away sa negosyo</button>
+              <button type="button" class="choice-btn" data-value="Court Procedure / Filing — how to file, deadlines, hearings">🏛️ Court Procedure / Filing — how to file, deadlines / paano mag-file, deadline</button>
+              <button type="button" class="choice-btn" data-value="Government / Administrative — permits, agencies">📋 Government / Administrative — permits, agencies / permiso, ahensya ng gobyerno</button>
+              <button type="button" class="choice-btn" data-value="Not sure — will describe situation">❓ I'm not sure — I'll describe my situation / Hindi ako sigurado</button>
+            </div>
+            <div class="form-nav"><button type="button" class="btn-next" onclick="nextStep(1)">Next →</button></div>
+          </div>
+
+          <!-- STEP 2: Name -->
+          <div class="form-step" id="step2">
+            <p class="form-question">How should we refer to you?<br><em style="font-family:'DM Sans';font-size:0.9rem;color:var(--text-muted);">Paano ka namin tatawaging?</em></p>
+            <p class="form-note">You may use a nickname or alias. — Maaaring gumamit ng palayaw.</p>
+            <input type="text" class="form-input" name="name" placeholder="Your name, nickname, or alias / Pangalan, palayaw, o anumang gusto mo" required>
+            <div class="form-nav">
+              <button type="button" class="btn-back" onclick="prevStep(2)">← Back</button>
+              <button type="button" class="btn-next" onclick="nextStep(2)">Next →</button>
+            </div>
+          </div>
+
+          <!-- STEP 3: Other parties -->
+          <div class="form-step" id="step3">
+            <p class="form-question">Who is the other party or parties involved?<br><em style="font-family:'DM Sans';font-size:0.9rem;color:var(--text-muted);">Sino ang kabilang partido?</em></p>
+            <p class="form-note">You may use aliases. Example: "My employer," "My neighbor," "The company." — Maaaring gumamit ng palayaw.</p>
+            <textarea class="form-textarea" name="other_parties" placeholder="Describe the other party or parties..."></textarea>
+            <div class="form-nav">
+              <button type="button" class="btn-back" onclick="prevStep(3)">← Back</button>
+              <button type="button" class="btn-next" onclick="nextStep(3)">Next →</button>
+            </div>
+          </div>
+
+          <!-- STEP 4: What happened -->
+          <div class="form-step" id="step4">
+            <p class="form-question">What happened?<br><em style="font-family:'DM Sans';font-size:0.9rem;color:var(--text-muted);">Ano ang nangyari?</em></p>
+            <p class="form-note">No legal terms needed. Just tell us the story as if you're telling a trusted friend. — Ikuwento mo lang parang sa isang pinagkakatiwalaang kaibigan.</p>
+            <textarea class="form-textarea" name="what_happened" placeholder="Describe what happened in your own words..." style="min-height:160px;" required></textarea>
+            <div class="form-nav">
+              <button type="button" class="btn-back" onclick="prevStep(4)">← Back</button>
+              <button type="button" class="btn-next" onclick="nextStep(4)">Next →</button>
+            </div>
+          </div>
+
+          <!-- STEP 5: When -->
+          <div class="form-step" id="step5">
+            <p class="form-question">When did this happen or start?<br><em style="font-family:'DM Sans';font-size:0.9rem;color:var(--text-muted);">Kailan ito nangyari o nagsimula?</em></p>
+            <p class="form-note">Approximate date is fine. — Approximate na petsa ay okay na.</p>
+            <input type="text" class="form-input" name="when_happened" placeholder="e.g. January 2025, about 3 months ago, last week..." required>
+            <div class="choices" id="ongoing-choices">
+              <button type="button" class="choice-btn" data-value="Still ongoing">Still ongoing / Nagpapatuloy pa</button>
+              <button type="button" class="choice-btn" data-value="Already resolved but need advice">Already resolved but I need advice / Tapos na pero kailangan ko ng payo</button>
+              <button type="button" class="choice-btn" data-value="About to happen — need guidance before it does">About to happen — I need guidance before it does / Malapit na mangyari</button>
+            </div>
+            <div class="form-nav">
+              <button type="button" class="btn-back" onclick="prevStep(5)">← Back</button>
+              <button type="button" class="btn-next" onclick="nextStep(5)">Next →</button>
+            </div>
+          </div>
+
+          <!-- STEP 6: Where -->
+          <div class="form-step" id="step6">
+            <p class="form-question">Where did this happen?<br><em style="font-family:'DM Sans';font-size:0.9rem;color:var(--text-muted);">Saan ito nangyari?</em></p>
+            <p class="form-note">City, province, or general area is fine. — Lungsod, probinsya, o pangkalahatang lugar ay okay na.</p>
+            <input type="text" class="form-input" name="where_happened" placeholder="e.g. Quezon City, Metro Manila, Cebu Province..." required>
+            <div class="form-nav">
+              <button type="button" class="btn-back" onclick="prevStep(6)">← Back</button>
+              <button type="button" class="btn-next" onclick="nextStep(6)">Next →</button>
+            </div>
+          </div>
+
+          <!-- STEP 7: What do you need -->
+          <div class="form-step" id="step7">
+            <p class="form-question">What outcome are you hoping for?<br><em style="font-family:'DM Sans';font-size:0.9rem;color:var(--text-muted);">Anong resulta ang inaasahan mo?</em></p>
+            <p class="form-note">Tell us what kind of help you are looking for. There are no wrong answers. — Walang maling sagot.</p>
+            <textarea class="form-textarea" name="desired_outcome" placeholder="e.g. I want to file a case / I just need to know my rights / I need a document reviewed..."></textarea>
+            <div class="form-nav">
+              <button type="button" class="btn-back" onclick="prevStep(7)">← Back</button>
+              <button type="button" class="btn-next" onclick="nextStep(7)">Next →</button>
+            </div>
+          </div>
+
+          <!-- STEP 8: Urgency + documents -->
+          <div class="form-step" id="step8">
+            <p class="form-question">How urgent is your concern?<br><em style="font-family:'DM Sans';font-size:0.9rem;color:var(--text-muted);">Gaano kaapurahan ang iyong alalahanin?</em></p>
+            <p class="form-note">This helps us prioritize your query. — Nakakatulong ito para unahin ang iyong tanong.</p>
+            <div class="choices" id="urgency-choices">
+              <button type="button" class="choice-btn" data-value="Urgent — response needed within 2 to 4 hours">⚡ Urgent — I need a response within 2 to 4 hours / Kailangan ko ng sagot sa loob ng 2–4 oras</button>
+              <button type="button" class="choice-btn" data-value="Standard — response within 24 hours">📋 Standard — response within 24 hours / Sagot sa loob ng 24 oras</button>
+            </div>
+            <p class="form-note" style="margin-top:1.5rem;">Do you have documents to attach? / Mayroon ka bang mga dokumentong i-aattach?</p>
+            <div class="doc-attach-box">
+              <p>If you have contracts, notices, photos, or any files related to your concern, you may upload them using the button below. This is completely optional.<br><em>Kung mayroon kang mga dokumento, maaari mo itong i-upload dito. Opsyonal ito.</em></p>
+              <!-- REPLACE THIS HREF WITH YOUR GOOGLE FORM LINK WHEN READY -->
+              <a href="GOOGLE_FORM_LINK_HERE" target="_blank" class="btn-attach">📎 Attach Documents / Mag-attach ng Dokumento</a>
+            </div>
+            <div class="form-nav">
+              <button type="button" class="btn-back" onclick="prevStep(8)">← Back</button>
+              <button type="button" class="btn-next" onclick="nextStep(8)">Next →</button>
+            </div>
+          </div>
+
+          <!-- STEP 9: Contact + checkbox -->
+          <div class="form-step" id="step9">
+            <p class="form-question">Where should we send your response?<br><em style="font-family:'DM Sans';font-size:0.9rem;color:var(--text-muted);">Saan namin ipapadala ang aming sagot?</em></p>
+            <p class="form-note">We need at least one way to reach you. Your contact details will never be shared with anyone. — Hindi ito ibabahagi sa kahit sino.</p>
+            <input type="email" class="form-input" name="email" placeholder="Email address (required) / Email address (kinakailangan)" required>
+            <input type="text" class="form-input" name="contact_number" placeholder="Contact number — Viber or WhatsApp (optional)">
+            <p class="form-note">Do you want to remain anonymous? / Gusto mo bang manatiling anonymous?</p>
+            <div class="choices" id="anon-choices">
+              <button type="button" class="choice-btn" data-value="Yes — keep my identity private">Yes — keep my identity private / Oo, panatilihing pribado</button>
+              <button type="button" class="choice-btn" data-value="No — you may use my name">No — you may use my name / Hindi, maaari ninyong gamitin ang aking pangalan</button>
+            </div>
+
+            <div class="checkbox-block">
+              <h4>Before you submit, please read and confirm: / Bago mag-submit, pakibasa at kumpirmahin:</h4>
+              <ul>
+                <li>The response I will receive is <strong>legal information, not legal advice.</strong></li>
+                <li>This does not create an <strong>attorney-client relationship.</strong></li>
+                <li>The purpose of this service is to <strong>steer me in the right direction</strong> in handling or deciding on my legal concern. It is not a substitute for formal legal representation.</li>
+                <li>This is a <strong>one-time transaction.</strong> It does not constitute continuous legal discussion or engagement, which is characteristic of an attorney-client relationship in the handling of legal cases.</li>
+                <li>Legal cases involve many <strong>variables, facts, and parties</strong> that may or may not be fully known at the time of this query.</li>
+                <li>The response provided is <strong>not conclusive, not final, and may change</strong> depending on additional facts, circumstances, or developments in my case.</li>
+                <li>Attie's response is <strong>AI-assisted and reviewed by a licensed Philippine lawyer</strong> for accuracy and consistency with Philippine law, but remains subject to the limitations stated above.</li>
+              </ul>
+              <label class="checkbox-agree">
+                <input type="checkbox" id="agreeCheckbox" onchange="toggleSubmit()">
+                <span>I have read, understood, and agree to all of the above. / Nabasa, naunawaan, at sumasang-ayon ako sa lahat ng nakasaad.</span>
+              </label>
+            </div>
+
+            <div class="form-nav">
+              <button type="button" class="btn-back" onclick="prevStep(9)">← Back</button>
+              <button type="button" class="btn-next" id="submitBtn" onclick="submitForm()" disabled>Submit Query →</button>
+            </div>
+          </div>
+        </form>
+
+        <!-- SUCCESS -->
+        <div class="form-success" id="formSuccess">
+          <div class="success-icon">✅</div>
+          <h3 class="success-title">Query Submitted</h3>
+          <p class="success-body">
+            Thank you for trusting Attie. Your query has been received and will be reviewed by a licensed Philippine lawyer.<br><br>
+            <em>Standard queries:</em> response within 24 hours.<br>
+            <em>Urgent queries:</em> response within 2 to 4 hours.<br><br>
+            Payment instructions will be included in our response. Please check your email — including your spam folder.<br><br>
+            <em>Salamat sa iyong tiwala sa Attie. Babalikan ka namin sa lalong madaling panahon.</em>
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="disclaimer reveal">
+      <p><strong>Important Notice:</strong> Attie provides AI-assisted legal information reviewed by a licensed Philippine lawyer. Responses are not raw AI-generated outputs. This service does not constitute formal legal advice and does not create an attorney-client relationship. Your information is kept strictly confidential. — <em>Ang Attie ay nagbibigay ng AI-assisted na legal na impormasyon na sinusuri ng isang abogadong Pilipino. Hindi ito pormal na legal na payo at hindi nito nililikha ang relasyon ng abogado at kliyente.</em></p>
+    </div>
+  </section>
+
+  <!-- 7. FEES -->
+  <section id="fees">
+    <p class="section-label reveal">Transparent Pricing</p>
+    <h2 class="section-title reveal">Simple, <em>Affordable</em> Fees</h2>
+    <div class="fees-box reveal">
+      <div class="fee-range">₱399 — ₱899</div>
+      <p class="fee-note">Our fees are kept simple and accessible. Pricing is determined by the <strong>complexity of your concern</strong> and whether <strong>document review</strong> is involved. There are no hidden charges, no retainer, and no surprise fees. Payment is via GCash. Instructions will be sent to you after your query is received and assessed.<br><br>
+      <em>Ang aming bayarin ay naaayon sa kumplikasyon ng iyong alalahanin at kung kinakailangan ang pagsusuri ng mga dokumento. Walang nakatagong bayarin.</em></p>
+    </div>
+  </section>
+
+  <!-- 8. RESPONSE TIME -->
+  <section id="response">
+    <p class="section-label reveal">Response Time</p>
+    <h2 class="section-title reveal">When to <em>Expect</em> Your Answer</h2>
+    <div class="response-box reveal">
+      <div class="response-times">
+        <div class="response-time-item">
+          <div class="response-time-label">Standard Query</div>
+          <div class="response-time-value standard">Within 24 Hours</div>
+          <p class="response-time-desc">For general legal questions, rights clarification, and concerns that do not require immediate action. / Para sa pangkalahatang legal na tanong at alalahanin na hindi kailangang aksyunan agad.</p>
+        </div>
+        <div class="response-time-item">
+          <div class="response-time-label">Urgent Query</div>
+          <div class="response-time-value urgent">Within 2–4 Hours</div>
+          <p class="response-time-desc">For time-sensitive concerns with upcoming hearings, expiring deadlines, or situations requiring immediate legal guidance. / Para sa mga alalahanin na may malapit na hearing, deadline, o sitwasyong nangangailangan ng agarang gabay.</p>
+        </div>
+      </div>
+      <div class="response-emphasis">
+        <strong>Why does it take time?</strong> Attie's responses are not instant AI-generated outputs. Every query is processed using AI trained on Philippine law, then carefully reviewed by a licensed Philippine lawyer to ensure accuracy and consistency with applicable statutes, rules, and jurisprudence. This review step is non-negotiable — it is what makes Attie's responses reliable, grounded in the actual law, and trustworthy.<br><br>
+        <em style="color:var(--text-muted);">Ang bawat sagot ay sinusuri ng isang lisensyadong abogadong Pilipino bago ipadala sa inyo — para masiguro ang katumpakan at konsistensya sa batas.</em>
+      </div>
+    </div>
+  </section>
+
+  <!-- 9. FOOTER -->
+  <footer>
+    <div class="footer-logo">Attie</div>
+    <div class="footer-tagline">Digital Law Office · Philippines</div>
+    <ul class="footer-links">
+      <li><a href="#different">Why Attie</a></li>
+      <li><a href="#areas">Practice Areas</a></li>
+      <li><a href="#query">Submit a Query</a></li>
+      <li><a href="#fees">Fees</a></li>
+      <li><a href="#response">Response Time</a></li>
+    </ul>
+    <p class="footer-copy">© 2026 Attie Digital Law Office. All rights reserved.</p>
+  </footer>
+
+  <script>
+    window.addEventListener('scroll', () => {
+      const pct = (window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100;
+      document.getElementById('scrollLine').style.width = pct + '%';
+    });
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+    let currentStep = 1;
+    const totalSteps = 9;
+    const formData = { concern: '', ongoing: '', urgency: '', anonymous: '' };
+
+    function updateProgress(step) {
+      document.getElementById('progressFill').style.width = Math.round((step / totalSteps) * 100) + '%';
+      document.getElementById('progressLabel').textContent = `Step ${step} of ${totalSteps}`;
+    }
+
+    function showStep(step) {
+      document.querySelectorAll('.form-step').forEach(s => s.classList.remove('active'));
+      const el = document.getElementById('step' + step);
+      if (el) { el.classList.add('active'); el.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); }
+      updateProgress(step);
+      currentStep = step;
+    }
+
+    document.querySelectorAll('.choices').forEach(group => {
+      group.querySelectorAll('.choice-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          group.querySelectorAll('.choice-btn').forEach(b => b.classList.remove('selected'));
+          btn.classList.add('selected');
+          const id = group.id;
+          if (id === 'concern-choices') { formData.concern = btn.dataset.value; document.getElementById('hidden_concern').value = btn.dataset.value; }
+          else if (id === 'ongoing-choices') { formData.ongoing = btn.dataset.value; document.getElementById('hidden_ongoing').value = btn.dataset.value; }
+          else if (id === 'urgency-choices') { formData.urgency = btn.dataset.value; document.getElementById('hidden_urgency').value = btn.dataset.value; }
+          else if (id === 'anon-choices') { formData.anonymous = btn.dataset.value; document.getElementById('hidden_anonymous').value = btn.dataset.value; }
+        });
+      });
+    });
+
+    function nextStep(step) {
+      if (step === 1 && !formData.concern) { alert('Please select your type of concern.'); return; }
+      if (step === 2 && !document.querySelector('[name="name"]').value.trim()) { alert('Please enter how we should refer to you.'); return; }
+      if (step === 4 && !document.querySelector('[name="what_happened"]').value.trim()) { alert('Please describe what happened.'); return; }
+      if (step === 5 && !document.querySelector('[name="when_happened"]').value.trim()) { alert('Please enter when this happened.'); return; }
+      if (step === 6 && !document.querySelector('[name="where_happened"]').value.trim()) { alert('Please enter where this happened.'); return; }
+      if (step === 8 && !formData.urgency) { alert('Please select how urgent your concern is.'); return; }
+      if (step < totalSteps) showStep(step + 1);
+    }
+
+    function prevStep(step) { if (step > 1) showStep(step - 1); }
+
+    function toggleSubmit() {
+      document.getElementById('submitBtn').disabled = !document.getElementById('agreeCheckbox').checked;
+    }
+
+    async function submitForm() {
+      if (!document.querySelector('[name="email"]').value.trim()) { alert('Please enter your email address.'); return; }
+      if (!document.getElementById('agreeCheckbox').checked) { alert('Please read and check the agreement before submitting.'); return; }
+      const data = new FormData(document.getElementById('queryForm'));
+      try {
+        const res = await fetch('https://api.web3forms.com/submit', { method: 'POST', body: data });
+        const result = await res.json();
+        if (result.success) {
+          document.getElementById('queryForm').style.display = 'none';
+          document.getElementById('progressLabel').style.display = 'none';
+          document.querySelector('.progress-bar').style.display = 'none';
+          document.getElementById('formSuccess').style.display = 'block';
+        } else { alert('Something went wrong. Please try again.'); }
+      } catch (err) { alert('Connection error. Please check your internet and try again.'); }
+    }
+  </script>
+
+</body>
+</html>
