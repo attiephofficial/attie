@@ -1,0 +1,933 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Philippine Legal Deadline Calculator — Attie</title>
+<link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Fredoka+One&family=EB+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy:   #1b2a4a;
+  --navy2:  #243659;
+  --gold:   #b8973a;
+  --gold2:  #d4af5a;
+  --cream:  #faf8f3;
+  --paper:  #ffffff;
+  --rule:   #d8d0bc;
+  --text:   #1a1a1a;
+  --muted:  #6b6456;
+  --light:  #f0ece3;
+  --green:  #1e5c3a;
+  --red:    #8b1a1a;
+  --amber:  #7a4f00;
+  --radius: 2px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'EB Garamond', 'Bookman Old Style', 'Book Antiqua', Palatino, Georgia, serif;
+  background: var(--cream);
+  color: var(--text);
+  font-size: 16px;
+  line-height: 1.65;
+  min-height: 100vh;
+}
+
+/* ─── HEADER ─────────────────────────────────────────────── */
+header {
+  background: var(--navy);
+  border-bottom: 4px solid var(--gold);
+  padding: 0 40px;
+}
+
+.header-inner {
+  max-width: 900px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 0;
+}
+
+.brand {}
+.brand-name {
+  font-family: 'Pacifico', cursive;
+  font-size: 1.9rem;
+  color: var(--gold2);
+  letter-spacing: 1px;
+  display: block;
+}
+.brand-sub {
+  font-family: 'Fredoka One', cursive;
+  font-size: 0.65rem;
+  color: #8899bb;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  display: block;
+  margin-top: 1px;
+}
+
+.header-right {
+  text-align: right;
+}
+.header-title {
+  font-family: 'EB Garamond', Georgia, serif;
+  font-size: 0.72rem;
+  color: #8899bb;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+}
+.header-edition {
+  font-family: 'Fredoka One', cursive;
+  font-size: 0.62rem;
+  color: var(--gold);
+  letter-spacing: 1px;
+  margin-top: 3px;
+  text-transform: uppercase;
+}
+
+/* ─── HERO BAND ───────────────────────────────────────────── */
+.hero {
+  background: var(--navy2);
+  border-bottom: 1px solid #2e4070;
+  padding: 22px 40px;
+  text-align: center;
+}
+.hero-inner { max-width: 900px; margin: 0 auto; }
+.hero h1 {
+  font-family: 'EB Garamond', Georgia, serif;
+  font-size: 1.55rem;
+  font-weight: 600;
+  color: #e8e2d4;
+  letter-spacing: 0.5px;
+  margin-bottom: 6px;
+}
+.hero-meta {
+  font-size: 0.75rem;
+  color: #8899bb;
+  letter-spacing: 0.5px;
+}
+.hero-meta span {
+  display: inline-block;
+  margin: 0 10px;
+}
+.hero-meta .dot { color: var(--gold); }
+
+/* ─── RULE 22 NOTICE ─────────────────────────────────────── */
+.container { max-width: 900px; margin: 0 auto; padding: 32px 24px 72px; }
+
+.rule22 {
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  border-left: 5px solid var(--navy);
+  padding: 14px 20px;
+  margin-bottom: 28px;
+  font-size: 0.83rem;
+  color: var(--muted);
+  line-height: 1.7;
+}
+.rule22 strong { color: var(--navy); }
+.rule22 em { color: var(--text); }
+
+/* ─── MAIN CARD ───────────────────────────────────────────── */
+.card {
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  border-top: 3px solid var(--navy);
+  box-shadow: 0 2px 12px rgba(27,42,74,.07);
+  padding: 36px 40px;
+  margin-bottom: 28px;
+}
+
+.card-section-label {
+  font-family: 'Fredoka One', cursive;
+  font-size: 0.65rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--muted);
+  border-bottom: 1px solid var(--rule);
+  padding-bottom: 10px;
+  margin-bottom: 24px;
+}
+
+/* ─── FORM ────────────────────────────────────────────────── */
+.form-row { margin-bottom: 24px; }
+.form-row:last-of-type { margin-bottom: 0; }
+
+label {
+  display: block;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--navy);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 8px;
+  font-family: 'EB Garamond', Georgia, serif;
+}
+
+.select-wrap { position: relative; }
+.select-wrap::after {
+  content: '▾';
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  color: var(--navy);
+  font-size: 0.85rem;
+}
+
+select, input[type="date"] {
+  width: 100%;
+  padding: 11px 16px;
+  border: 1px solid #c8c0ae;
+  border-radius: var(--radius);
+  font-family: 'EB Garamond', 'Bookman Old Style', Georgia, serif;
+  font-size: 1rem;
+  color: var(--text);
+  background: var(--cream);
+  -webkit-appearance: none;
+  appearance: none;
+  cursor: pointer;
+  transition: border-color .2s, box-shadow .2s;
+}
+select:focus, input[type="date"]:focus {
+  outline: none;
+  border-color: var(--navy);
+  box-shadow: 0 0 0 3px rgba(27,42,74,.1);
+  background: #fff;
+}
+select:disabled {
+  background: #f5f2ec;
+  color: #aaa;
+  cursor: not-allowed;
+}
+
+.info-panel {
+  margin-top: 10px;
+  padding: 12px 16px;
+  background: #f5f2ea;
+  border-left: 4px solid var(--gold);
+  font-size: 0.82rem;
+  color: var(--muted);
+  line-height: 1.7;
+  display: none;
+}
+.info-panel.show { display: block; }
+.info-panel strong { color: var(--navy); }
+
+.trigger-hint {
+  margin-top: 7px;
+  font-size: 0.77rem;
+  color: var(--muted);
+  font-style: italic;
+}
+
+/* ─── DIVIDER ─────────────────────────────────────────────── */
+.divider {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin: 30px 0 26px;
+}
+.divider::before, .divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--rule);
+}
+.divider-text {
+  font-family: 'Fredoka One', cursive;
+  font-size: 0.65rem;
+  letter-spacing: 2px;
+  color: var(--muted);
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+/* ─── BUTTON ──────────────────────────────────────────────── */
+.btn-calc {
+  width: 100%;
+  margin-top: 28px;
+  padding: 14px;
+  background: var(--navy);
+  color: var(--gold2);
+  border: none;
+  border-radius: var(--radius);
+  font-family: 'Fredoka One', cursive;
+  font-size: 1.05rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background .2s, color .2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+.btn-calc:hover { background: var(--navy2); color: #fff; }
+.btn-calc svg { width: 16px; height: 16px; fill: currentColor; }
+
+/* ─── RESULTS ─────────────────────────────────────────────── */
+.results { display: none; }
+.results.show { display: block; }
+
+.results-card {
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  border-top: 3px solid var(--gold);
+  box-shadow: 0 2px 12px rgba(27,42,74,.07);
+  padding: 36px 40px;
+  margin-bottom: 20px;
+}
+
+.res-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--rule);
+  padding-bottom: 12px;
+  margin-bottom: 26px;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.res-header h2 {
+  font-family: 'EB Garamond', Georgia, serif;
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--navy);
+  letter-spacing: 0.3px;
+}
+.res-header-sub {
+  font-size: 0.78rem;
+  color: var(--muted);
+  font-style: italic;
+}
+
+/* PRIMARY RESULT */
+.primary-result {
+  background: var(--navy);
+  border-radius: var(--radius);
+  padding: 28px 32px;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+.pr-left {}
+.pr-label {
+  font-family: 'Fredoka One', cursive;
+  font-size: 0.62rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 6px;
+}
+.pr-date {
+  font-family: 'EB Garamond', Georgia, serif;
+  font-size: 2.1rem;
+  font-weight: 600;
+  color: #f0e8d4;
+  line-height: 1.1;
+}
+.pr-dow {
+  font-size: 0.82rem;
+  color: #8899bb;
+  margin-top: 4px;
+}
+.pr-right { text-align: right; }
+.pr-period-label {
+  font-family: 'Fredoka One', cursive;
+  font-size: 0.62rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 6px;
+}
+.pr-period {
+  font-family: 'EB Garamond', Georgia, serif;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #f0e8d4;
+}
+.pr-period-sub {
+  font-size: 0.78rem;
+  color: #8899bb;
+  margin-top: 4px;
+}
+
+/* BADGE */
+.badge {
+  display: inline-block;
+  padding: 5px 14px;
+  border-radius: 2px;
+  font-family: 'Fredoka One', cursive;
+  font-size: 0.72rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-top: 10px;
+}
+.badge-past    { background: #f5f2ec; color: var(--muted); border: 1px solid var(--rule); }
+.badge-today   { background: var(--gold); color: var(--navy); }
+.badge-urgent  { background: #fbeaea; color: var(--red); border: 1px solid #e8c0c0; }
+.badge-warn    { background: #fef8ec; color: var(--amber); border: 1px solid #e8d8a0; }
+.badge-ok      { background: #eaf3ee; color: var(--green); border: 1px solid #b0d4bc; }
+
+/* DETAIL TABLE */
+.detail-table {
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  overflow: hidden;
+  font-size: 0.87rem;
+  margin-bottom: 18px;
+}
+.dt-row {
+  display: flex;
+  border-bottom: 1px solid #ece8df;
+}
+.dt-row:last-child { border-bottom: none; }
+.dt-row:nth-child(even) { background: var(--light); }
+.dt-label {
+  width: 30%;
+  flex-shrink: 0;
+  padding: 12px 16px;
+  font-size: 0.71rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: var(--muted);
+  background: var(--light);
+  border-right: 1px solid var(--rule);
+  font-family: 'EB Garamond', Georgia, serif;
+}
+.dt-row:nth-child(even) .dt-label { background: #e8e3d8; }
+.dt-value {
+  width: 70%;
+  padding: 12px 16px;
+  color: var(--text);
+  line-height: 1.6;
+}
+
+/* NOTICES */
+.notice {
+  padding: 13px 17px;
+  border-radius: var(--radius);
+  font-size: 0.82rem;
+  line-height: 1.7;
+  margin-bottom: 10px;
+}
+.notice-adj {
+  background: #eaf3ee;
+  border: 1px solid #b0d4bc;
+  border-left: 4px solid var(--green);
+  color: #194d2e;
+}
+.notice-warn {
+  background: #fef8ec;
+  border: 1px solid #e8d8a0;
+  border-left: 4px solid var(--gold);
+  color: #5c3d00;
+}
+
+/* DISCLAIMER */
+.disclaimer {
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  padding: 16px 20px;
+  font-size: 0.75rem;
+  color: var(--muted);
+  line-height: 1.7;
+  border-radius: var(--radius);
+}
+.disclaimer strong { color: var(--navy); }
+
+/* FOOTER */
+footer {
+  background: var(--navy);
+  border-top: 3px solid var(--gold);
+  padding: 18px 40px;
+  text-align: center;
+  margin-top: 40px;
+}
+.footer-inner { max-width: 900px; margin: 0 auto; }
+footer p {
+  font-size: 0.72rem;
+  color: #6677aa;
+  letter-spacing: 0.5px;
+}
+footer strong { color: var(--gold); }
+
+/* RESPONSIVE */
+@media(max-width:640px){
+  .card, .results-card { padding: 20px 18px; }
+  header { padding: 0 18px; }
+  .hero { padding: 18px; }
+  .primary-result { padding: 22px 20px; flex-direction: column; }
+  .pr-right { text-align: left; }
+  .pr-date { font-size: 1.6rem; }
+  .dt-row { flex-direction: column; }
+  .dt-label, .dt-value { width: 100%; padding: 8px 14px; }
+  .dt-label { border-right: none; border-bottom: 1px solid var(--rule); }
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="header-inner">
+    <div class="brand">
+      <span class="brand-name">attie</span>
+      <span class="brand-sub">You already have rights. We just help you use them.</span>
+    </div>
+    <div class="header-right">
+      <div class="header-title">Legal Deadline Calculator</div>
+      <div class="header-edition">Civil Procedure Edition · PH 2025–2026</div>
+    </div>
+  </div>
+</header>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-inner">
+    <h1>Philippine Legal Deadline Calculator</h1>
+    <div class="hero-meta">
+      <span>Rules of Court</span><span class="dot">·</span>
+      <span>2019 Amendments</span><span class="dot">·</span>
+      <span>Small Claims &amp; Summary Procedure</span><span class="dot">·</span>
+      <span>PH Holidays 2025–2026</span>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="container">
+
+  <!-- Rule 22 Notice -->
+  <div class="rule22">
+    <strong>Rule 22 (Period Computation):</strong> The day of the act or event that starts the period is <em>excluded</em>; the date of performance is <em>included</em>. If the last day falls on a <strong>Saturday, Sunday, or legal holiday</strong>, the time shall not run until the next working day. This calculator applies that rule automatically.
+  </div>
+
+  <!-- Calculator Form -->
+  <div class="card">
+    <div class="card-section-label">Deadline Parameters</div>
+
+    <div class="form-row">
+      <label for="cat">Step 1 &mdash; Select Category</label>
+      <div class="select-wrap">
+        <select id="cat" onchange="loadTypes()">
+          <option value="">— Select a category —</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <label for="typ">Step 2 &mdash; Select Deadline / Period Type</label>
+      <div class="select-wrap">
+        <select id="typ" onchange="showInfo()" disabled>
+          <option value="">— Select a category first —</option>
+        </select>
+      </div>
+      <div class="info-panel" id="infoPanel"></div>
+    </div>
+
+    <div class="form-row">
+      <label for="tdate">Step 3 &mdash; Enter Trigger Date</label>
+      <input type="date" id="tdate">
+      <div class="trigger-hint">The date of the act, notice, receipt, or event that starts the running of the period. This date is excluded from the count under Rule 22.</div>
+    </div>
+
+    <button class="btn-calc" onclick="compute()">
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 14H7v-2h5v2zm5-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
+      Compute Deadline
+    </button>
+  </div>
+
+  <!-- Results -->
+  <div class="results" id="results">
+    <div class="results-card">
+      <div class="res-header">
+        <h2>Computation Result</h2>
+        <div class="res-header-sub" id="resSubhead"></div>
+      </div>
+
+      <div class="primary-result">
+        <div class="pr-left">
+          <div class="pr-label">Deadline Date</div>
+          <div class="pr-date" id="rDate">—</div>
+          <div class="pr-dow" id="rDayOfWeek">—</div>
+          <div id="rBadge"></div>
+        </div>
+        <div class="pr-right">
+          <div class="pr-period-label">Statutory Period</div>
+          <div class="pr-period" id="rPeriod">—</div>
+          <div class="pr-period-sub" id="rPeriodSub">—</div>
+        </div>
+      </div>
+
+      <div class="detail-table">
+        <div class="dt-row">
+          <div class="dt-label">Trigger Date</div>
+          <div class="dt-value" id="dtTrigger">—</div>
+        </div>
+        <div class="dt-row">
+          <div class="dt-label">Raw Deadline</div>
+          <div class="dt-value" id="dtRaw">—</div>
+        </div>
+        <div class="dt-row">
+          <div class="dt-label">Rule 22 Adjustment</div>
+          <div class="dt-value" id="dtAdj">—</div>
+        </div>
+        <div class="dt-row">
+          <div class="dt-label">Legal Basis</div>
+          <div class="dt-value" id="dtBasis">—</div>
+        </div>
+        <div class="dt-row">
+          <div class="dt-label">Notes</div>
+          <div class="dt-value" id="dtNotes">—</div>
+        </div>
+      </div>
+
+      <div id="notices"></div>
+    </div>
+  </div>
+
+  <!-- Disclaimer -->
+  <div class="disclaimer">
+    <strong>Disclaimer:</strong> This tool is for general informational and educational purposes only and does not constitute legal advice. Computed deadlines are based on the Rules of Court as amended, applicable procedural issuances, and PH regular and special non-working holidays for 2025–2026. Local court orders, court-imposed deadlines, local holidays, and other variables not captured here may affect the actual deadline. Always verify with the applicable rules, relevant court orders, and counsel of record. Attie and its creators assume no liability for errors, omissions, or reliance on output generated by this tool.
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <p><strong>attie</strong> &nbsp;·&nbsp; Philippine Legal Tech &nbsp;·&nbsp; attiephofficial.github.io &nbsp;·&nbsp; Free legal tools for every Filipino</p>
+  </div>
+</footer>
+
+<script>
+/* ─────────────────────────────────────────────────────────────
+   DATA: ALL DEADLINE TYPES
+───────────────────────────────────────────────────────────── */
+const D = {
+  "Pleadings (Rule 11)":[
+    {n:"Answer — Domestic Defendant",d:30,b:"Rule 11, Sec. 1",t:"30 calendar days from service of summons and complaint. For service by publication, period begins from the date of last publication. Failure to timely answer may result in a declaration of default upon motion."},
+    {n:"Answer — Foreign Private Juridical Entity",d:60,b:"Rule 11, Sec. 2",t:"60 calendar days from service of summons through the foreign entity's resident agent, the government officer designated by law, or any officer or agent found within the Philippines."},
+    {n:"Answer to Amended Complaint — As Matter of Right",d:30,b:"Rule 11, Sec. 3",t:"30 calendar days from service of the amended complaint. Applies when amendment is made before a responsive pleading is served, or when a party may amend once as a matter of right under Rule 10."},
+    {n:"Answer to Amended Complaint — With Leave of Court",d:15,b:"Rule 11, Sec. 3",t:"15 calendar days from notice of the order admitting the amendment. Applies when amendment requires prior leave of court. The court may fix a different period in the order."},
+    {n:"Answer to Counterclaim or Cross-claim",d:20,b:"Rule 11, Sec. 4",t:"20 calendar days from service of the counterclaim or cross-claim. Compulsory counterclaims not raised in the Answer are barred (Rule 9, Sec. 2)."},
+    {n:"Answer to Third-Party Complaint",d:30,b:"Rule 11, Sec. 5",t:"30 calendar days from service of summons on the third-party defendant, unless the court fixes a different period by order."},
+    {n:"Reply (Optional)",d:15,b:"Rule 11, Sec. 6",t:"15 calendar days from service of the pleading being responded to. Under the 2019 Amendments, a Reply is optional. Failure to file a Reply does NOT constitute an admission of the allegations in the answer or the genuineness and due execution of actionable documents."},
+  ],
+  "Motions — Trial Court (Rules 15, 37)":[
+    {n:"Motion for Reconsideration — Trial Court",d:15,b:"Rule 37, Sec. 1",t:"15 calendar days from notice of the judgment or final order. Only ONE motion for reconsideration is allowed per party per judgment. Filing tolls the period to appeal from the date of filing until receipt of notice of denial. A pro forma MR does NOT toll the period."},
+    {n:"Motion for New Trial — Trial Court",d:15,b:"Rule 37, Sec. 1",t:"15 calendar days from notice of judgment. Grounds: FAME (fraud, accident, mistake, excusable negligence) or newly discovered evidence. Only one motion for new trial is allowed. If denied, the aggrieved party may appeal from the original judgment."},
+    {n:"Comment / Opposition to Litigious Motion",d:5,b:"Rule 15, Sec. 5 (2019 Amendments)",t:"5 calendar days from receipt of the litigious motion. The 2019 Amendments eliminated the 3-day notice rule. Litigious motions include: MR, motion for new trial, leave to file amended pleading, postponement, extension, bill of particulars, and similar contested motions."},
+    {n:"Motion to Set Case for Pre-Trial (Plaintiff's Duty)",d:5,b:"Rule 18, Sec. 1 (2019 Amendments)",t:"Plaintiff must move ex parte to set the case for pre-trial within 5 calendar days from the filing of the reply, or from the expiration of the period to file the reply, whichever comes first. Failure may be a ground for dismissal."},
+  ],
+  "Motions — Appellate Courts (Rules 52, 56)":[
+    {n:"Motion for Reconsideration — Court of Appeals",d:15,b:"Rule 52, Sec. 1",t:"15 calendar days from notice of the CA judgment or final resolution. Only one MR is allowed. Filing tolls the period to file a Rule 45 petition to the Supreme Court."},
+    {n:"Motion for Reconsideration — Supreme Court",d:15,b:"Rule 56, Sec. 2; SC Internal Rules",t:"15 calendar days from notice of the SC decision or resolution. One MR is allowed as a general rule. A second MR requires leave of court and is disfavored; it shall not be entertained except for extraordinarily persuasive reasons and only after express leave is obtained."},
+  ],
+  "Pre-Trial (Rule 18)":[
+    {n:"Pre-Trial Brief — Count Back from Pre-Trial Date",d:3,b:"Rule 18, Sec. 6",t:"Pre-trial brief must be filed AT LEAST 3 days before the scheduled pre-trial. Enter the date set by the court for pre-trial as the trigger date. The result will show the LATEST day you can file the brief. If that date falls on a non-working day, file on the PRECEDING working day.",countback:true},
+  ],
+  "Ordinary Appeals — Rules 40 and 41":[
+    {n:"Notice of Appeal — MTC to RTC (Rule 40)",d:15,b:"Rule 40, Sec. 2",t:"15 calendar days from notice of the judgment or final order. Docket and other lawful fees must be paid within this period. Record on Appeal is required only in special proceedings and cases where multiple appeals are allowed."},
+    {n:"Record on Appeal — MTC to RTC, where required",d:30,b:"Rule 40, Sec. 3",t:"30 calendar days from notice of judgment. Required only in special proceedings and cases where multiple appeals are allowed. Both filing and approval of the Record on Appeal are needed to perfect the appeal."},
+    {n:"Notice of Appeal — RTC to CA (Rule 41)",d:15,b:"Rule 41, Sec. 3",t:"15 calendar days from notice of judgment or final order. Docket fees must be paid. Note: If the appeal raises only pure questions of law, it must go directly to the SC via Rule 45, not the CA."},
+    {n:"Record on Appeal — RTC to CA, where required",d:30,b:"Rule 41, Sec. 3",t:"30 calendar days from notice of judgment. Required in special proceedings, actions for recovery of property involving accounting, and other cases specified under the Rules where multiple appeals are permitted."},
+  ],
+  "Petition for Review — Rules 42, 43, 45":[
+    {n:"Petition for Review — RTC to CA (Rule 42)",d:15,b:"Rule 42, Sec. 1",t:"15 calendar days from notice of the RTC decision or denial or resolution of an MR. Extendible for another 15 days upon motion duly filed and payment of docket fees. No further extension after the first, except for the most compelling reasons (Rule 42 is more liberally treated than Rule 45)."},
+    {n:"Petition for Review — Quasi-Judicial Bodies to CA (Rule 43)",d:15,b:"Rule 43, Sec. 4",t:"15 calendar days from notice of the award, judgment, decision, order, or resolution. Covers: CSC, DARAB, HLURB, LLDA, Office of the President, and other listed quasi-judicial agencies. For NLRC decisions, the remedy is Rule 65 to the CA per the St. Martin Funeral Homes doctrine. Extendible for 15 days."},
+    {n:"Petition for Review on Certiorari — to SC (Rule 45)",d:15,b:"Rule 45, Sec. 2",t:"15 calendar days from notice of the judgment, final order, or resolution of the CA, Sandiganbayan, RTC (on pure questions of law), or other courts. Extendible for justifiable reasons. Only questions of law are raised. SC review is discretionary; denial is not an adjudication on the merits."},
+  ],
+  "Extraordinary Remedies — Rules 64 and 65":[
+    {n:"Petition for Certiorari — Rule 65",d:60,b:"Rule 65, Sec. 4 (A.M. No. 07-7-12-SC)",t:"60 calendar days from notice of the judgment, order, or resolution. No extension except for the most compelling grounds, and only for an additional 15 days. An MR of the assailed ruling is generally required before filing, subject to established exceptions (patently null order, urgent necessity, MR is plainly futile, etc.)."},
+    {n:"Petition for Prohibition — Rule 65",d:60,b:"Rule 65, Sec. 4",t:"60 calendar days from notice of the act or ruling sought to be prohibited. Same rules as certiorari. Requires that there is no plain, speedy, and adequate remedy in the ordinary course of law."},
+    {n:"Petition for Mandamus — Rule 65",d:60,b:"Rule 65, Sec. 4",t:"60 calendar days from notice of the refusal or omission to perform a duty. Prior demand and refusal are generally required. Lies only for ministerial acts, not discretionary ones. No plain, speedy, adequate ordinary remedy must be available."},
+    {n:"Review of COMELEC / COA Decisions — Rule 64",d:30,b:"Rule 64, Sec. 3",t:"30 calendar days from notice of the judgment or final order of COMELEC or COA. NOT governed by the 60-day Rule 65 period. This 30-day period is NOT extendible. Only questions of law or grave abuse of discretion are reviewable by the SC on certiorari."},
+  ],
+  "Summary Procedure & Small Claims":[
+    {n:"Answer — Revised Rules on Summary Procedure",d:10,b:"Revised Rules on Summary Procedure, Sec. 5",t:"10 calendar days from service of summons. Applies in MTC/MeTC civil cases not exceeding P2,000,000 in amount, and all forcible entry/unlawful detainer cases regardless of claim amount. All defenses and compulsory counterclaims must be raised in the Answer or they are barred."},
+    {n:"Answer — Small Claims",d:10,b:"A.M. No. 08-8-7-SC (Revised Rules on Small Claims, as amended)",t:"10 calendar days from receipt of summons and Statement of Claim. No lawyers allowed to appear for parties. No motion for reconsideration at the MTC level. Judgment is immediately final and executory upon service. For 2022 onwards, small claims threshold is P400,000 for first-level courts."},
+    {n:"Appeal — Summary Procedure Judgment (MTC to RTC)",d:15,b:"Revised Rules on Summary Procedure, Sec. 21",t:"15 calendar days from notice of judgment. Only questions of law may be raised on appeal. RTC decision is final, executory, and unappealable. Docket fees must be paid."},
+    {n:"Appeal — Small Claims Judgment (MTC to RTC)",d:15,b:"A.M. No. 08-8-7-SC",t:"15 calendar days from notice of judgment. Small claims judgment is immediately executory unless a supersedeas bond is filed. RTC decision on a small claims appeal is final, executory, and unappealable."},
+  ],
+  "Ejectment — Rule 70":[
+    {n:"Answer — Unlawful Detainer / Forcible Entry",d:10,b:"Rule 70, Sec. 6; Revised Rules on Summary Procedure",t:"10 calendar days from service of summons. All defenses and compulsory counterclaims must be raised in the Answer or they are barred. No extension allowed. Governed by the Revised Rules on Summary Procedure."},
+    {n:"Appeal from MTC Ejectment Decision to RTC",d:15,b:"Rule 70, Sec. 19",t:"15 calendar days from notice of judgment. To stay execution pending appeal, defendant must: (1) perfect the appeal AND (2) pay or deposit the amount of rent due per the judgment AND (3) file a supersedeas bond covering back rents, damages, and costs. All three conditions are required."},
+    {n:"Supersedeas Bond to Stay Execution Pending Appeal",d:15,b:"Rule 70, Sec. 19",t:"Must be filed simultaneously with or immediately upon perfecting the appeal. Amount must be equivalent to back rents, damages, and costs adjudged by the court. Periodic deposits during pendency of the appeal are also required to maintain stay of execution."},
+  ],
+  "Provisional Remedies — Rules 57–61":[
+    {n:"TRO Duration — Ex Parte (72-Hour TRO)",d:3,b:"Rule 58, Sec. 5",t:"An ex parte TRO is effective for only 72 hours (3 calendar days) from issuance. Within this period, the court MUST conduct a summary hearing on the application for a 20-day TRO. Enter the date of issuance of the ex parte TRO. Result shows the expiry of the 72-hour period."},
+    {n:"TRO Duration — With Notice (20-Day TRO)",d:20,b:"Rule 58, Sec. 5",t:"20 calendar days from issuance. NOT extendible under any circumstance. Within this period, the court must resolve the application for a preliminary injunction. Enter the TRO issuance date."},
+    {n:"Hearing on Preliminary Injunction Application",d:5,b:"Rule 58, Sec. 5",t:"Court must set the hearing on the application for preliminary injunction not later than 5 calendar days from the filing of the application. Enter the date the application was filed. Result shows the outer limit by which the court must have set the hearing."},
+  ],
+  "Execution — Rule 39":[
+    {n:"Execution by Motion — 5-Year Period",d:1826,b:"Rule 39, Sec. 6",t:"5 years (approximately 1,826 days) from the date of ENTRY of judgment. After this period, a motion for execution will be denied. To enforce the judgment thereafter, an independent action to revive must be filed within the prescriptive period. Enter the date of ENTRY of judgment."},
+    {n:"Execution by Independent Action — 10-Year Period",d:3652,b:"Rule 39, Sec. 6; Art. 1144, Civil Code",t:"10 years (approximately 3,652 days) from the date of ENTRY of judgment. Prescriptive period for actions based on judgments under Art. 1144, Civil Code. After this period, the judgment is unenforceable. Enter the date of ENTRY of judgment."},
+  ],
+  "Finality of Judgment":[
+    {n:"Finality — Trial Court (No MR/Appeal Filed)",d:15,b:"Rule 36, Sec. 2; Rule 41, Sec. 3",t:"Judgment or final order becomes final and executory 15 calendar days from notice if no MR or notice of appeal is timely filed. Entry of judgment is made after finality. Once final, the trial court loses jurisdiction to alter or modify the judgment."},
+    {n:"Finality — Court of Appeals Judgment",d:15,b:"Rule 52; Rule 56",t:"CA judgment becomes final 15 calendar days from notice if no MR or Rule 45 petition is timely filed. The Clerk of Court enters the judgment in the Book of Entries of Judgments upon finality."},
+    {n:"Finality — Supreme Court Decision or Resolution",d:15,b:"SC Internal Rules, Rule 19",t:"SC decision or resolution becomes final 15 calendar days from notice. After entry, no further MR or motion for reconsideration is entertained as a matter of right. SC may also issue entry of judgment motu proprio."},
+  ],
+  "Other Civil Procedure Periods":[
+    {n:"Demurrer to Evidence — Civil Case (Rule 33)",d:15,b:"Rule 33, Sec. 1",t:"Filed after plaintiff rests. 15 calendar days from the court's grant of leave or directive. In civil cases, no leave of court is required to file demurrer. If demurrer filed WITHOUT leave is denied, defendant is deemed to have waived the right to present evidence and judgment is rendered on the basis of plaintiff's evidence."},
+    {n:"Written Offer of Evidence (Rule 132, Sec. 35)",d:5,b:"Rule 132, Sec. 35 (2019 Amendments)",t:"Written formal offer must be filed after the party rests. The court sets the deadline (usually 3–10 days). This calculator uses a default 5-day period from the court's directive. Adjust if the court set a different number of days."},
+    {n:"Comment / Objection to Written Offer of Evidence",d:3,b:"Rule 132, Sec. 35 (2019 Amendments)",t:"3 calendar days from receipt of the written formal offer, unless the court sets a different period. Objections not raised within the period are deemed waived. Objections must specify the ground with particularity."},
+    {n:"Service by Registered Mail — Completeness of Service",d:5,b:"Rule 13, Sec. 10",t:"Service by registered mail is COMPLETE 5 calendar days after the first notice of the postmaster, regardless of whether the addressee actually received the mail. Enter the date of the first postmaster notice."},
+    {n:"Filing of Answer in Interpleader (Rule 62)",d:15,b:"Rule 62, Sec. 4",t:"15 calendar days from service of summons requiring each claimant to file an answer setting forth the claimant's claim. The court may declare defaulting claimants in default. The plaintiff is absolved of liability upon complying with the court's directive."},
+    {n:"Intervention — Motion to Intervene (Rule 19)",d:0,b:"Rule 19, Sec. 2",t:"No fixed running period. A motion to intervene may be filed at any time BEFORE rendition of judgment by the trial court. Once judgment is rendered, intervention is generally no longer available absent exceptional circumstances recognized by jurisprudence. No deadline computation applicable."},
+  ]
+};
+
+/* ─────────────────────────────────────────────────────────────
+   PHILIPPINE HOLIDAYS 2025–2026
+───────────────────────────────────────────────────────────── */
+const PH = {
+  "2025-01-01":"New Year's Day",
+  "2025-02-25":"EDSA People Power Anniversary",
+  "2025-04-09":"Araw ng Kagitingan",
+  "2025-04-17":"Maundy Thursday",
+  "2025-04-18":"Good Friday",
+  "2025-04-19":"Black Saturday",
+  "2025-05-01":"Labor Day",
+  "2025-06-12":"Independence Day",
+  "2025-08-21":"Ninoy Aquino Day",
+  "2025-08-25":"National Heroes Day",
+  "2025-11-01":"All Saints Day",
+  "2025-11-02":"All Souls Day",
+  "2025-11-30":"Bonifacio Day",
+  "2025-12-08":"Feast of the Immaculate Conception",
+  "2025-12-24":"Christmas Eve",
+  "2025-12-25":"Christmas Day",
+  "2025-12-30":"Rizal Day",
+  "2025-12-31":"New Year's Eve",
+  "2026-01-01":"New Year's Day",
+  "2026-02-25":"EDSA People Power Anniversary",
+  "2026-04-02":"Maundy Thursday",
+  "2026-04-03":"Good Friday",
+  "2026-04-04":"Black Saturday",
+  "2026-04-09":"Araw ng Kagitingan",
+  "2026-05-01":"Labor Day",
+  "2026-06-12":"Independence Day",
+  "2026-08-21":"Ninoy Aquino Day",
+  "2026-08-31":"National Heroes Day",
+  "2026-11-01":"All Saints Day",
+  "2026-11-02":"All Souls Day",
+  "2026-11-30":"Bonifacio Day",
+  "2026-12-08":"Feast of the Immaculate Conception",
+  "2026-12-24":"Christmas Eve",
+  "2026-12-25":"Christmas Day",
+  "2026-12-30":"Rizal Day",
+  "2026-12-31":"New Year's Eve",
+};
+
+/* ─────────────────────────────────────────────────────────────
+   UTILITIES
+───────────────────────────────────────────────────────────── */
+const MONTHS = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+const DAYS   = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+
+const dk   = d => d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
+const isHol = d => !!PH[dk(d)];
+const holName= d => PH[dk(d)]||"";
+const isSun = d => d.getDay()===0;
+const isSat = d => d.getDay()===6;
+const isNW  = d => isSun(d)||isSat(d)||isHol(d);
+const addD  = (d,n) => { const r=new Date(d); r.setDate(r.getDate()+n); return r; };
+const fmt   = d => DAYS[d.getDay()]+", "+MONTHS[d.getMonth()]+" "+d.getDate()+", "+d.getFullYear();
+const fmtS  = d => MONTHS[d.getMonth()]+" "+d.getDate()+", "+d.getFullYear();
+
+function nextWD(d) {
+  const r = new Date(d); const reasons = [];
+  while(isNW(r)){
+    reasons.push(isSat(r)?"Saturday":isSun(r)?"Sunday":"Holiday — "+holName(r));
+    r.setDate(r.getDate()+1);
+  }
+  return { date:r, adjusted:reasons.length>0, reasons };
+}
+function prevWD(d) {
+  const r = new Date(d); const reasons = [];
+  while(isNW(r)){
+    reasons.push(isSat(r)?"Saturday":isSun(r)?"Sunday":"Holiday — "+holName(r));
+    r.setDate(r.getDate()-1);
+  }
+  return { date:r, adjusted:reasons.length>0, reasons };
+}
+function daysFromToday(dt) {
+  const t = new Date(); t.setHours(0,0,0,0);
+  return Math.round((dt-t)/86400000);
+}
+
+/* ─────────────────────────────────────────────────────────────
+   INIT — POPULATE CATEGORIES
+───────────────────────────────────────────────────────────── */
+(function init(){
+  const cs = document.getElementById("cat");
+  for(const k of Object.keys(D)){
+    const o = document.createElement("option");
+    o.value = k; o.textContent = k;
+    cs.appendChild(o);
+  }
+})();
+
+/* ─────────────────────────────────────────────────────────────
+   LOAD TYPES
+───────────────────────────────────────────────────────────── */
+function loadTypes(){
+  const ts  = document.getElementById("typ");
+  const cat = document.getElementById("cat").value;
+  ts.innerHTML = "";
+  document.getElementById("infoPanel").classList.remove("show");
+  document.getElementById("results").classList.remove("show");
+  if(!cat){ ts.innerHTML='<option value="">— Select a category first —</option>'; ts.disabled=true; return; }
+  ts.disabled = false;
+  const ph = document.createElement("option"); ph.value=""; ph.textContent="— Select deadline type —"; ts.appendChild(ph);
+  for(const it of D[cat]){
+    const o = document.createElement("option");
+    o.value = it.n;
+    o.textContent = it.n + (it.d>0 ? " (" + (it.d>=365 ? Math.round(it.d/365.25)+" year(s)" : it.d+" days") + ")" : "");
+    ts.appendChild(o);
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────
+   SHOW INFO PANEL
+───────────────────────────────────────────────────────────── */
+function showInfo(){
+  const cat   = document.getElementById("cat").value;
+  const typ   = document.getElementById("typ").value;
+  const panel = document.getElementById("infoPanel");
+  document.getElementById("results").classList.remove("show");
+  if(!cat||!typ){ panel.classList.remove("show"); return; }
+  const it = D[cat].find(x=>x.n===typ);
+  if(!it){ panel.classList.remove("show"); return; }
+  panel.innerHTML = "<strong>Legal Basis:</strong> "+it.b+"<br><span style='display:block;margin-top:6px'>"+it.t+"</span>";
+  panel.classList.add("show");
+}
+
+/* ─────────────────────────────────────────────────────────────
+   COMPUTE
+───────────────────────────────────────────────────────────── */
+function compute(){
+  const cat  = document.getElementById("cat").value;
+  const typ  = document.getElementById("typ").value;
+  const tval = document.getElementById("tdate").value;
+
+  if(!cat||!typ||!tval){ alert("Please complete all three fields before computing."); return; }
+
+  const it = D[cat].find(x=>x.n===typ);
+  if(!it) return;
+
+  // Parse date locally to avoid UTC offset issues
+  const [y,m,dd] = tval.split("-").map(Number);
+  const trigger  = new Date(y, m-1, dd);
+
+  // ── Zero-day (no fixed period) ──────────────────────────
+  if(it.d===0){
+    document.getElementById("rDate").textContent       = "See Notes";
+    document.getElementById("rDayOfWeek").textContent  = "No fixed period applies";
+    document.getElementById("rPeriod").textContent     = "N/A";
+    document.getElementById("rPeriodSub").textContent  = "No running period";
+    document.getElementById("dtTrigger").textContent   = fmt(trigger);
+    document.getElementById("dtRaw").textContent       = "N/A — no fixed running period";
+    document.getElementById("dtAdj").textContent       = "N/A";
+    document.getElementById("dtBasis").textContent     = it.b;
+    document.getElementById("dtNotes").textContent     = it.t;
+    document.getElementById("rBadge").innerHTML        = "";
+    document.getElementById("notices").innerHTML       = "";
+    document.getElementById("resSubhead").textContent  = it.n;
+    document.getElementById("results").classList.add("show");
+    return;
+  }
+
+  const isCountBack = !!it.countback;
+  const raw = isCountBack ? addD(trigger, -it.d) : addD(trigger, it.d);
+  const { date:final, adjusted, reasons } = isCountBack ? prevWD(raw) : nextWD(raw);
+
+  // ── Period label ─────────────────────────────────────────
+  let pLabel;
+  if(it.d >= 365) pLabel = Math.round(it.d/365.25)+" year(s)  /  "+it.d+" calendar days";
+  else pLabel = it.d+" calendar day"+(it.d===1?"":"s");
+
+  // ── Populate fields ──────────────────────────────────────
+  document.getElementById("rDate").textContent      = fmtS(final);
+  document.getElementById("rDayOfWeek").textContent = DAYS[final.getDay()];
+  document.getElementById("rPeriod").textContent    = pLabel;
+  document.getElementById("rPeriodSub").textContent = isCountBack
+    ? "Count-back from trigger date"
+    : "From trigger date (exclusive)";
+  document.getElementById("dtTrigger").textContent  = fmt(trigger);
+  document.getElementById("dtRaw").textContent      = fmt(raw) + (isNW(raw) ? " — non-working day" : "");
+  document.getElementById("dtAdj").textContent      = adjusted
+    ? "Moved " + (isCountBack?"to preceding":"to next") + " working day: "+fmt(final)+" ("+reasons[0]+")"
+    : "No adjustment — raw deadline falls on a working day";
+  document.getElementById("dtBasis").textContent    = it.b;
+  document.getElementById("dtNotes").textContent    = it.t;
+  document.getElementById("resSubhead").textContent = it.n;
+
+  // ── Badge ─────────────────────────────────────────────────
+  const rem = daysFromToday(final);
+  let badge = "";
+  if(rem < 0)       badge = `<span class="badge badge-past">Deadline passed ${Math.abs(rem)} day${Math.abs(rem)!==1?"s":""} ago</span>`;
+  else if(rem === 0) badge = `<span class="badge badge-today">Due Today</span>`;
+  else if(rem <= 3)  badge = `<span class="badge badge-urgent">${rem} day${rem!==1?"s":""} remaining</span>`;
+  else if(rem <= 7)  badge = `<span class="badge badge-warn">${rem} days remaining</span>`;
+  else               badge = `<span class="badge badge-ok">${rem} days remaining</span>`;
+  document.getElementById("rBadge").innerHTML = badge;
+
+  // ── Notices ───────────────────────────────────────────────
+  let notices = "";
+
+  if(adjusted){
+    const dir = isCountBack
+      ? "moved back to the preceding working day"
+      : "moved forward to the next working day";
+    notices += `<div class="notice notice-adj">
+      <strong>&#10003; Rule 22 Applied:</strong> Raw deadline of <strong>${fmt(raw)}</strong> falls on a non-working day (${reasons.join(", ")}). Under Rule 22, the deadline is ${dir}: <strong>${fmt(final)}</strong>.
+    </div>`;
+  }
+
+  if(!isCountBack && it.d <= 3652){
+    const hols = [];
+    for(let i=1; i<=it.d; i++){
+      const cd = addD(trigger, i);
+      if(isHol(cd)) hols.push({ s:fmtS(cd), n:holName(cd) });
+    }
+    if(hols.length > 0 && hols.length <= 8){
+      const hl = hols.map(h=>`${h.s} (${h.n})`).join(" &nbsp;·&nbsp; ");
+      notices += `<div class="notice notice-warn">
+        <strong>&#9888; ${hols.length} Holiday${hols.length>1?"s":""} Within This Period:</strong><br>
+        ${hl}<br>
+        <span style="margin-top:4px;display:block;font-size:0.79rem;opacity:.9">These holidays are counted within the calendar period. Rule 22 adjusts only the last day. Verify local court closures for holidays not captured here.</span>
+      </div>`;
+    } else if(hols.length > 8){
+      notices += `<div class="notice notice-warn">
+        <strong>&#9888; ${hols.length} holidays fall within this period.</strong> Only the last day is adjusted under Rule 22. Verify local court closures for any unlisted holidays.
+      </div>`;
+    }
+  }
+
+  if(isCountBack){
+    notices += `<div class="notice notice-warn">
+      <strong>&#9888; Count-Back Deadline:</strong> The brief must be <em>received</em> by the court on or before this date — not merely filed or transmitted. When in doubt, file earlier.
+    </div>`;
+  }
+
+  document.getElementById("notices").innerHTML = notices;
+  document.getElementById("results").classList.add("show");
+  document.getElementById("results").scrollIntoView({ behavior:"smooth", block:"start" });
+}
+</script>
+</body>
+</html>
