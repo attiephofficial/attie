@@ -1,907 +1,594 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="dark">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Attie — Digital Law Office</title>
   <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Fredoka+One&family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    /* ── THEME VARIABLES ── */
-    :root {
-      --green: #00cc6a;
-      --green-hover: #00a855;
-      --gold: #c9a84c;
-    }
-
-    [data-theme="dark"] {
-      --bg: #080808;
-      --bg-card: #1a1a1a;
-      --bg-card2: #141414;
-      --border: rgba(255,255,255,0.06);
-      --border-green: rgba(0,204,106,0.2);
-      --text: #f5f5f0;
-      --text-muted: #888;
-      --text-heading: #f5f5f0;
-      --nav-bg: rgba(8,8,8,0.88);
-      --disclaimer-bg: rgba(201,168,76,0.05);
-      --disclaimer-border: rgba(201,168,76,0.15);
-      --toggle-icon: "☀️";
-    }
-
-    [data-theme="light"] {
-      --bg: #f5f5f0;
-      --bg-card: #ebebе6;
-      --bg-card: #e8e8e3;
-      --bg-card2: #deded9;
-      --border: rgba(0,0,0,0.08);
-      --border-green: rgba(0,153,80,0.25);
-      --text: #111111;
-      --text-muted: #555;
-      --text-heading: #0a0a0a;
-      --nav-bg: rgba(245,245,240,0.92);
-      --disclaimer-bg: rgba(201,168,76,0.07);
-      --disclaimer-border: rgba(201,168,76,0.25);
-      --toggle-icon: "🌙";
-    }
-
-    html { scroll-behavior: smooth; }
-
-    body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: 'DM Sans', sans-serif;
-      font-weight: 300;
-      overflow-x: hidden;
-      transition: background 0.4s, color 0.4s;
-    }
-
-    body::before {
-      content: '';
-      position: fixed;
-      inset: 0;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
-      pointer-events: none;
-      z-index: 999;
-      opacity: 0.3;
-    }
-
-    /* ── NAV ── */
-    nav {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      z-index: 100;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 1.2rem 3rem;
-      background: var(--nav-bg);
-      backdrop-filter: blur(12px);
-      border-bottom: 1px solid var(--border);
-      transition: background 0.4s, border-color 0.4s;
-    }
-
-    .nav-logo {
-      font-family: 'Pacifico', cursive;
-      font-size: 1.5rem;
-      background: linear-gradient(135deg, var(--green), var(--gold));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-
-    .nav-right { display: flex; align-items: center; gap: 2rem; }
-
-    .nav-links { display: flex; gap: 2rem; list-style: none; }
-
-    .nav-links a {
-      color: var(--text-muted);
-      text-decoration: none;
-      font-size: 0.8rem;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      transition: color 0.3s;
-    }
-
-    .nav-links a:hover { color: var(--green); }
-
-    .theme-toggle {
-      background: transparent;
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      padding: 0.35rem 0.75rem;
-      cursor: pointer;
-      font-size: 0.9rem;
-      transition: border-color 0.3s, background 0.3s;
-      color: var(--text-muted);
-      display: flex;
-      align-items: center;
-      gap: 0.4rem;
-    }
-
-    .theme-toggle:hover { border-color: var(--green); color: var(--text); }
-
-    .scroll-line {
-      position: fixed;
-      top: 0; left: 0;
-      height: 3px;
-      background: linear-gradient(90deg, var(--green), var(--gold));
-      z-index: 200;
-      width: 0%;
-      transition: width 0.1s;
-    }
-
-    /* ── HERO ── */
-    .hero {
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
-      padding: 8rem 2rem 4rem;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .hero::before {
-      content: '';
-      position: absolute;
-      width: 700px; height: 700px;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(0,204,106,0.07) 0%, transparent 70%);
-      top: 50%; left: 50%;
-      transform: translate(-50%, -50%);
-      pointer-events: none;
-    }
-
-    .hero-title {
-      font-family: 'Pacifico', cursive;
-      font-size: clamp(3.5rem, 10vw, 8rem);
-      line-height: 1;
-      background: linear-gradient(135deg, var(--green) 0%, #00e0ff 50%, var(--gold) 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      margin-bottom: 0.75rem;
-      opacity: 0;
-      animation: fadeUp 0.8s 0.2s forwards;
-    }
-
-    .hero-eyebrow {
-      font-family: 'Fredoka One', cursive;
-      font-size: clamp(0.9rem, 2vw, 1.1rem);
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: var(--text-muted);
-      margin-bottom: 2rem;
-      opacity: 0;
-      animation: fadeUp 0.8s 0.4s forwards;
-    }
-
-    .hero-statement {
-      max-width: 680px;
-      font-size: clamp(1.1rem, 2vw, 1.35rem);
-      line-height: 1.75;
-      color: var(--text);
-      margin-bottom: 1.5rem;
-      opacity: 0;
-      animation: fadeUp 0.8s 0.6s forwards;
-    }
-
-    .hero-statement em { color: var(--green); font-style: normal; font-weight: 500; }
-
-    .hero-substatement {
-      max-width: 600px;
-      font-size: 0.95rem;
-      line-height: 1.8;
-      color: var(--text-muted);
-      margin-bottom: 3rem;
-      opacity: 0;
-      animation: fadeUp 0.8s 0.8s forwards;
-    }
-
-    .hero-cta {
-      display: flex;
-      gap: 1rem;
-      flex-wrap: wrap;
-      justify-content: center;
-      opacity: 0;
-      animation: fadeUp 0.8s 1s forwards;
-    }
-
-    .btn-primary {
-      background: var(--green);
-      color: #fff;
-      border: none;
-      padding: 1rem 2.5rem;
-      font-family: 'Fredoka One', cursive;
-      font-size: 1.05rem;
-      letter-spacing: 0.05em;
-      border-radius: 4px;
-      cursor: pointer;
-      transition: all 0.3s;
-      text-decoration: none;
-      display: inline-block;
-    }
-
-    .btn-primary:hover { background: var(--green-hover); transform: translateY(-2px); box-shadow: 0 8px 30px rgba(0,204,106,0.25); }
-
-    .btn-secondary {
-      background: transparent;
-      color: var(--text);
-      border: 1px solid var(--border);
-      padding: 1rem 2.5rem;
-      font-family: 'Fredoka One', cursive;
-      font-size: 1.05rem;
-      letter-spacing: 0.05em;
-      border-radius: 4px;
-      cursor: pointer;
-      transition: all 0.3s;
-      text-decoration: none;
-      display: inline-block;
-    }
-
-    .btn-secondary:hover { border-color: var(--green); color: var(--green); transform: translateY(-2px); }
-
-    /* ── SECTIONS ── */
-    section { padding: 6rem 2rem; max-width: 1100px; margin: 0 auto; }
-
-    .divider { width: 60px; height: 2px; background: linear-gradient(90deg, var(--green), transparent); margin: 0 auto 4rem; }
-
-    .section-label {
-      font-family: 'Fredoka One', cursive;
-      font-size: 0.75rem;
-      letter-spacing: 0.25em;
-      text-transform: uppercase;
-      color: var(--green);
-      margin-bottom: 1rem;
-    }
-
-    .section-title {
-      font-family: 'DM Serif Display', serif;
-      font-size: clamp(2rem, 4vw, 3rem);
-      line-height: 1.2;
-      margin-bottom: 1.5rem;
-      color: var(--text-heading);
-    }
-
-    .section-title em { font-style: italic; color: var(--green); }
-
-    .section-body { font-size: 1rem; line-height: 1.9; color: var(--text-muted); max-width: 620px; }
-
-    /* ── SLIDESHOW ── */
-    .slideshow-wrapper {
-      position: relative;
-      background: var(--bg-card);
-      border: 1px solid var(--border-green);
-      border-radius: 16px;
-      padding: 4rem 3rem;
-      margin: 4rem 0;
-      overflow: hidden;
-      min-height: 280px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-    }
-
-    .slideshow-wrapper::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 2px;
-      background: linear-gradient(90deg, var(--green), var(--gold));
-    }
-
-    .slide {
-      display: none;
-      animation: fadeUp 0.5s forwards;
-    }
-
-    .slide.active { display: block; }
-
-    .slide-label {
-      font-family: 'Fredoka One', cursive;
-      font-size: 0.7rem;
-      letter-spacing: 0.25em;
-      text-transform: uppercase;
-      color: var(--green);
-      margin-bottom: 1rem;
-    }
-
-    .slide-quote {
-      font-family: 'DM Serif Display', serif;
-      font-size: clamp(1.3rem, 3vw, 2rem);
-      font-style: italic;
-      line-height: 1.6;
-      color: var(--text-heading);
-      margin-bottom: 1rem;
-    }
-
-    .slide-quote span { color: var(--green); font-style: normal; }
-
-    .slide-body {
-      font-size: 0.95rem;
-      line-height: 1.9;
-      color: var(--text-muted);
-      max-width: 680px;
-    }
-
-    .slide-body strong { color: var(--text); }
-
-    .slide-nav {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-      margin-top: 2rem;
-    }
-
-    .slide-dot {
-      width: 8px; height: 8px;
-      border-radius: 50%;
-      background: var(--border);
-      cursor: pointer;
-      transition: background 0.3s, transform 0.3s;
-      border: none;
-    }
-
-    .slide-dot.active { background: var(--green); transform: scale(1.3); }
-
-    .slide-arrow {
-      background: transparent;
-      border: 1px solid var(--border);
-      color: var(--text-muted);
-      width: 32px; height: 32px;
-      border-radius: 50%;
-      cursor: pointer;
-      font-size: 0.8rem;
-      transition: all 0.3s;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-left: auto;
-    }
-
-    .slide-arrow:hover { border-color: var(--green); color: var(--green); }
-
-    /* ── TRUST ── */
-    .trust-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 2rem; margin-top: 3rem; }
-
-    .trust-item { display: flex; gap: 1rem; align-items: flex-start; }
-
-    .trust-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green); margin-top: 0.4rem; flex-shrink: 0; }
-
-    .trust-text h4 { font-family: 'Fredoka One', cursive; font-size: 0.95rem; color: var(--text-heading); margin-bottom: 0.3rem; letter-spacing: 0.03em; }
-
-    .trust-text p { font-size: 0.85rem; color: var(--text-muted); line-height: 1.7; }
-
-    /* ── AREAS ── */
-    .areas { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-top: 3rem; }
-
-    .area-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      padding: 1.5rem;
-      transition: all 0.3s;
-      position: relative;
-      overflow: hidden;
-      text-decoration: none;
-      color: inherit;
-      display: block;
-    }
-
-    .area-card::before { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, var(--green), transparent); transform: scaleX(0); transform-origin: left; transition: transform 0.3s; }
-
-    .area-card:hover::before { transform: scaleX(1); }
-    .area-card:hover { border-color: var(--border-green); transform: translateY(-3px); }
-
-    .area-icon { font-size: 1.5rem; margin-bottom: 0.75rem; }
-
-    .area-title { font-family: 'Fredoka One', cursive; font-size: 1rem; color: var(--text-heading); margin-bottom: 0.5rem; letter-spacing: 0.03em; }
-
-    .area-desc { font-size: 0.8rem; color: var(--text-muted); line-height: 1.6; }
-
-    /* ── HOW IT WORKS ── */
-    .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; margin-top: 3rem; }
-
-    .step { background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; padding: 2rem; transition: border-color 0.3s, transform 0.3s; }
-
-    .step:hover { border-color: var(--border-green); transform: translateY(-4px); }
-
-    .step-number { font-family: 'Pacifico', cursive; font-size: 3rem; background: linear-gradient(135deg, var(--green), var(--gold)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; line-height: 1; margin-bottom: 1rem; }
-
-    .step-title { font-family: 'Fredoka One', cursive; font-size: 1.15rem; color: var(--text-heading); margin-bottom: 0.75rem; letter-spacing: 0.03em; }
-
-    .step-body { font-size: 0.9rem; line-height: 1.8; color: var(--text-muted); }
-
-    /* ── FEES ── */
-    .fees-box { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 2.5rem; margin-top: 3rem; position: relative; overflow: hidden; }
-
-    .fees-box::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, var(--green), var(--gold)); }
-
-    .fee-range { font-family: 'Pacifico', cursive; font-size: clamp(2rem, 5vw, 3.5rem); background: linear-gradient(135deg, var(--green), var(--gold)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 1rem; }
-
-    .fee-note { font-size: 0.9rem; color: var(--text-muted); line-height: 1.8; max-width: 600px; }
-
-    .fee-note strong { color: var(--text); }
-
-    /* ── RESPONSE TIME ── */
-    .response-box { background: var(--bg-card); border: 1px solid rgba(201,168,76,0.15); border-radius: 12px; padding: 2.5rem; margin-top: 3rem; position: relative; overflow: hidden; }
-
-    .response-box::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, var(--gold), transparent); }
-
-    .response-times { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.5rem; margin: 2rem 0; }
-
-    .response-time-item { background: var(--bg-card2); border: 1px solid var(--border); border-radius: 8px; padding: 1.5rem; }
-
-    .response-time-label { font-family: 'Fredoka One', cursive; font-size: 0.75rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.5rem; }
-
-    .response-time-value { font-family: 'DM Serif Display', serif; font-size: 1.6rem; color: var(--text-heading); margin-bottom: 0.5rem; }
-
-    .response-time-value.standard { color: var(--green); }
-    .response-time-value.urgent { color: var(--gold); }
-
-    .response-time-desc { font-size: 0.8rem; color: var(--text-muted); line-height: 1.6; }
-
-    .response-emphasis { font-size: 0.88rem; color: var(--text-muted); line-height: 1.8; border-top: 1px solid var(--border); padding-top: 1.5rem; }
-
-    .response-emphasis strong { color: var(--green); }
-
-    /* ── CONTACT ── */
-    .contact-box { background: var(--bg-card); border: 1px solid var(--border-green); border-radius: 12px; padding: 2.5rem; margin-top: 2rem; text-align: center; position: relative; overflow: hidden; }
-
-    .contact-box::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, var(--green), var(--gold)); }
-
-    .contact-details { display: flex; flex-direction: column; gap: 1rem; align-items: center; }
-
-    .contact-item { background: var(--bg-card2); border: 1px solid var(--border-green); border-radius: 8px; padding: 1rem 2rem; min-width: 280px; }
-
-    .contact-item-label { font-family: 'Fredoka One', cursive; font-size: 0.75rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.4rem; }
-
-    .contact-item-value { font-size: 1rem; color: var(--green); }
-
-    .contact-note { font-size: 0.78rem; color: var(--text-muted); margin-top: 1.2rem; line-height: 1.7; }
-
-    /* ── DISCLAIMER ── */
-    .disclaimer { background: var(--disclaimer-bg); border: 1px solid var(--disclaimer-border); border-radius: 8px; padding: 1.5rem 2rem; margin-top: 4rem; }
-
-    .disclaimer p { font-size: 0.8rem; color: var(--text-muted); line-height: 1.8; text-align: center; }
-
-    .disclaimer strong { color: var(--gold); }
-
-    /* ── FOOTER ── */
-    footer { border-top: 1px solid var(--border); padding: 3rem 2rem; text-align: center; }
-
-    .footer-logo { font-family: 'Pacifico', cursive; font-size: 2rem; background: linear-gradient(135deg, var(--green), var(--gold)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 0.5rem; }
-
-    .footer-tagline { font-family: 'Fredoka One', cursive; font-size: 0.8rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 2rem; }
-
-    .footer-links { display: flex; gap: 2rem; justify-content: center; list-style: none; margin-bottom: 2rem; flex-wrap: wrap; }
-
-    .footer-links a { color: var(--text-muted); text-decoration: none; font-size: 0.8rem; letter-spacing: 0.08em; text-transform: uppercase; transition: color 0.3s; }
-
-    .footer-links a:hover { color: var(--green); }
-
-    .footer-disclaimer { max-width: 800px; margin: 0 auto 2rem; font-size: 0.78rem; color: var(--text-muted); line-height: 1.8; }
-
-    .footer-copy { font-size: 0.75rem; color: var(--text-muted); opacity: 0.5; }
-
-    /* ── ANIMATIONS ── */
-    @keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
-
-    .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.7s ease, transform 0.7s ease; }
-    .reveal.visible { opacity: 1; transform: translateY(0); }
-
-    /* ── MOBILE ── */
-    @media (max-width: 768px) {
-      nav { padding: 1rem 1.5rem; }
-      .nav-links { display: none; }
-      section { padding: 4rem 1.5rem; }
-      .slideshow-wrapper { padding: 2rem 1.5rem; }
-      .fees-box, .response-box, .contact-box { padding: 1.5rem; }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--green:#00cc6a;--green-hover:#00a855;--gold:#c9a84c}
+    [data-theme="dark"]{--bg:#080808;--bg-card:#1a1a1a;--bg-card2:#141414;--border:rgba(255,255,255,0.06);--border-green:rgba(0,204,106,0.2);--text:#f5f5f0;--text-muted:#888;--text-heading:#f5f5f0;--nav-bg:rgba(8,8,8,0.88);--disclaimer-bg:rgba(201,168,76,0.05);--disclaimer-border:rgba(201,168,76,0.15)}
+    [data-theme="light"]{--bg:#f5f5f0;--bg-card:#e8e8e3;--bg-card2:#deded9;--border:rgba(0,0,0,0.08);--border-green:rgba(0,153,80,0.25);--text:#111111;--text-muted:#555;--text-heading:#0a0a0a;--nav-bg:rgba(245,245,240,0.92);--disclaimer-bg:rgba(201,168,76,0.07);--disclaimer-border:rgba(201,168,76,0.25)}
+    html{scroll-behavior:smooth}
+    body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-weight:300;overflow-x:hidden;transition:background 0.4s,color 0.4s}
+    body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");pointer-events:none;z-index:999;opacity:0.3}
+
+    /* NAV */
+    nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;justify-content:space-between;align-items:center;padding:1.2rem 3rem;background:var(--nav-bg);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);transition:background 0.4s}
+    .nav-logo{font-family:'Pacifico',cursive;font-size:1.5rem;background:linear-gradient(135deg,var(--green),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;cursor:pointer}
+    .nav-right{display:flex;align-items:center;gap:2rem}
+    .nav-links{display:flex;gap:2rem;list-style:none}
+    .nav-links a{color:var(--text-muted);text-decoration:none;font-size:0.8rem;letter-spacing:0.1em;text-transform:uppercase;transition:color 0.3s}
+    .nav-links a:hover{color:var(--green)}
+    .nav-links a.nav-tools{color:var(--gold);border:1px solid rgba(201,168,76,0.3);padding:0.3rem 0.85rem;border-radius:20px;font-size:0.75rem;transition:all 0.3s}
+    .nav-links a.nav-tools:hover{background:rgba(201,168,76,0.1);border-color:var(--gold)}
+    .theme-toggle{background:transparent;border:1px solid var(--border);border-radius:20px;padding:0.35rem 0.75rem;cursor:pointer;font-size:0.9rem;transition:border-color 0.3s;color:var(--text-muted);display:flex;align-items:center;gap:0.4rem}
+    .theme-toggle:hover{border-color:var(--green);color:var(--text)}
+    .hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;background:transparent;border:none;padding:4px}
+    .hamburger span{display:block;width:22px;height:2px;background:var(--text-muted);border-radius:2px;transition:all 0.3s}
+    .hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+    .hamburger.open span:nth-child(2){opacity:0}
+    .hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+    .mobile-menu{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:var(--nav-bg);backdrop-filter:blur(16px);z-index:99;flex-direction:column;justify-content:center;align-items:center;gap:2rem}
+    .mobile-menu.open{display:flex}
+    .mobile-menu a{color:var(--text-muted);text-decoration:none;font-family:'Fredoka One',cursive;font-size:1.3rem;letter-spacing:0.1em;text-transform:uppercase;transition:color 0.3s;cursor:pointer}
+    .mobile-menu a:hover{color:var(--green)}
+    .mobile-menu a.nav-tools{color:var(--gold)}
+    .scroll-line{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--green),var(--gold));z-index:200;width:0%;transition:width 0.1s}
+
+    /* HERO */
+    .hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:8rem 2rem 5rem;position:relative;overflow:hidden}
+    .hero::before{content:'';position:absolute;width:700px;height:700px;border-radius:50%;background:radial-gradient(circle,rgba(0,204,106,0.07) 0%,transparent 70%);top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none}
+    .hero-title{font-family:'Pacifico',cursive;font-size:clamp(3.5rem,10vw,8rem);line-height:1;background:linear-gradient(135deg,var(--green) 0%,#00e0ff 50%,var(--gold) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:0.75rem;opacity:0;animation:fadeUp 0.8s 0.2s forwards}
+    .hero-eyebrow{font-family:'Fredoka One',cursive;font-size:clamp(0.9rem,2vw,1.1rem);letter-spacing:0.15em;text-transform:uppercase;color:var(--text-muted);margin-bottom:2rem;opacity:0;animation:fadeUp 0.8s 0.4s forwards}
+    .hero-statement{max-width:680px;font-size:clamp(1.1rem,2vw,1.35rem);line-height:1.75;color:var(--text);margin-bottom:1.5rem;opacity:0;animation:fadeUp 0.8s 0.6s forwards}
+    .hero-statement em{color:var(--green);font-style:normal;font-weight:500}
+    .hero-substatement{max-width:600px;font-size:0.95rem;line-height:1.8;color:var(--text-muted);margin-bottom:3rem;opacity:0;animation:fadeUp 0.8s 0.8s forwards}
+    .hero-cta{display:flex;gap:1rem;flex-wrap:wrap;justify-content:center;opacity:0;animation:fadeUp 0.8s 1s forwards}
+    .btn-primary{background:var(--green);color:#fff;border:none;padding:1rem 2.5rem;font-family:'Fredoka One',cursive;font-size:1.05rem;letter-spacing:0.05em;border-radius:4px;cursor:pointer;transition:all 0.3s;text-decoration:none;display:inline-block}
+    .btn-primary:hover{background:var(--green-hover);transform:translateY(-2px);box-shadow:0 8px 30px rgba(0,204,106,0.25)}
+    .btn-secondary{background:transparent;color:var(--text);border:1px solid var(--border);padding:1rem 2.5rem;font-family:'Fredoka One',cursive;font-size:1.05rem;letter-spacing:0.05em;border-radius:4px;cursor:pointer;transition:all 0.3s;text-decoration:none;display:inline-block}
+    .btn-secondary:hover{border-color:var(--green);color:var(--green);transform:translateY(-2px)}
+
+    /* TEASER CAROUSEL */
+    .teaser-section{padding:0 2rem 5rem;max-width:860px;margin:0 auto}
+    .teaser-label{font-family:'Fredoka One',cursive;font-size:0.65rem;letter-spacing:2.5px;text-transform:uppercase;color:var(--text-muted);margin-bottom:1.2rem;display:flex;align-items:center;justify-content:center;gap:0.75rem}
+    .teaser-label::before,.teaser-label::after{content:'';display:inline-block;width:28px;height:1px;background:var(--border)}
+    .teaser-track-wrap{overflow:hidden;border-radius:16px;border:1px solid var(--border);background:var(--bg-card);position:relative;cursor:pointer}
+    .teaser-track-wrap::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--green),var(--gold));z-index:2}
+    .teaser-track{display:flex;transition:transform 0.5s cubic-bezier(0.4,0,0.2,1)}
+    .teaser-slide{min-width:100%;display:flex;align-items:center;gap:2.5rem;padding:2.5rem 3rem;transition:background 0.3s;user-select:none}
+    .teaser-track-wrap:hover{border-color:var(--border-green)}
+    .teaser-illustration{flex-shrink:0;width:160px;height:140px;display:flex;align-items:center;justify-content:center;border-radius:12px;background:rgba(0,204,106,0.04);border:1px solid var(--border-green)}
+    .teaser-illustration svg{width:100px;height:100px}
+    .teaser-content{flex:1;text-align:left}
+    .teaser-badge{font-family:'Fredoka One',cursive;font-size:0.6rem;letter-spacing:2px;text-transform:uppercase;color:var(--green);margin-bottom:0.6rem;display:flex;align-items:center;gap:0.5rem}
+    .teaser-badge-live{width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 6px rgba(0,204,106,0.8);animation:pulse-dot 2s infinite;display:inline-block}
+    @keyframes pulse-dot{0%,100%{box-shadow:0 0 6px rgba(0,204,106,0.6)}50%{box-shadow:0 0 14px rgba(0,204,106,1)}}
+    .teaser-tool-name{font-family:'DM Serif Display',serif;font-size:clamp(1.3rem,3vw,1.8rem);color:var(--text-heading);line-height:1.2;margin-bottom:0.75rem}
+    .teaser-oneliner{font-size:0.95rem;color:var(--text-muted);line-height:1.7;max-width:460px;margin-bottom:1.2rem}
+    .teaser-cta{font-family:'Fredoka One',cursive;font-size:0.75rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold);display:flex;align-items:center;gap:0.5rem}
+    .teaser-cta-arrow{transition:transform 0.3s;display:inline-block}
+    .teaser-track-wrap:hover .teaser-cta-arrow{transform:translateX(5px)}
+    .teaser-controls{display:flex;align-items:center;justify-content:center;gap:0.75rem;margin-top:1.25rem}
+    .teaser-dot{width:7px;height:7px;border-radius:50%;background:var(--border);border:none;cursor:pointer;transition:all 0.3s;padding:0}
+    .teaser-dot.active{background:var(--green);transform:scale(1.3)}
+    .teaser-prev,.teaser-next{background:transparent;border:1px solid var(--border);color:var(--text-muted);width:30px;height:30px;border-radius:50%;cursor:pointer;font-size:0.8rem;transition:all 0.3s;display:flex;align-items:center;justify-content:center}
+    .teaser-prev:hover,.teaser-next:hover{border-color:var(--green);color:var(--green)}
+
+    /* SECTIONS */
+    section{padding:6rem 2rem;max-width:1100px;margin:0 auto}
+    .divider{width:60px;height:2px;background:linear-gradient(90deg,var(--green),transparent);margin:0 auto 4rem}
+    .section-label{font-family:'Fredoka One',cursive;font-size:0.75rem;letter-spacing:0.25em;text-transform:uppercase;color:var(--green);margin-bottom:1rem}
+    .section-title{font-family:'DM Serif Display',serif;font-size:clamp(2rem,4vw,3rem);line-height:1.2;margin-bottom:1.5rem;color:var(--text-heading)}
+    .section-title em{font-style:italic;color:var(--green)}
+    .section-body{font-size:1rem;line-height:1.9;color:var(--text-muted);max-width:620px}
+
+    /* WHY ATTIE SLIDESHOW */
+    .slideshow-wrapper{position:relative;background:var(--bg-card);border:1px solid var(--border-green);border-radius:16px;padding:4rem 3rem;margin:4rem 0;overflow:hidden;min-height:280px;display:flex;flex-direction:column;justify-content:center}
+    .slideshow-wrapper::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--green),var(--gold))}
+    .slide{display:none;animation:fadeUp 0.5s forwards}
+    .slide.active{display:block}
+    .slide-label{font-family:'Fredoka One',cursive;font-size:0.7rem;letter-spacing:0.25em;text-transform:uppercase;color:var(--green);margin-bottom:1rem}
+    .slide-quote{font-family:'DM Serif Display',serif;font-size:clamp(1.3rem,3vw,2rem);font-style:italic;line-height:1.6;color:var(--text-heading);margin-bottom:1rem}
+    .slide-quote span{color:var(--green);font-style:normal}
+    .slide-body{font-size:0.95rem;line-height:1.9;color:var(--text-muted);max-width:680px}
+    .slide-body strong{color:var(--text)}
+    .slide-nav{display:flex;align-items:center;gap:0.75rem;margin-top:2rem}
+    .slide-dot{width:8px;height:8px;border-radius:50%;background:var(--border);cursor:pointer;transition:background 0.3s,transform 0.3s;border:none}
+    .slide-dot.active{background:var(--green);transform:scale(1.3)}
+    .slide-arrow{background:transparent;border:1px solid var(--border);color:var(--text-muted);width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:0.8rem;transition:all 0.3s;display:flex;align-items:center;justify-content:center;margin-left:auto}
+    .slide-arrow:hover{border-color:var(--green);color:var(--green)}
+
+    /* TRUST */
+    .trust-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:2rem;margin-top:3rem}
+    .trust-item{display:flex;gap:1rem;align-items:flex-start}
+    .trust-dot{width:8px;height:8px;border-radius:50%;background:var(--green);margin-top:0.4rem;flex-shrink:0}
+    .trust-text h4{font-family:'Fredoka One',cursive;font-size:0.95rem;color:var(--text-heading);margin-bottom:0.3rem;letter-spacing:0.03em}
+    .trust-text p{font-size:0.85rem;color:var(--text-muted);line-height:1.7}
+
+    /* AREAS */
+    .areas{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem;margin-top:3rem}
+    .area-card{background:var(--bg-card);border:1px solid var(--border);border-radius:6px;padding:1.5rem;transition:all 0.3s;position:relative;overflow:hidden;text-decoration:none;color:inherit;display:block}
+    .area-card::before{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--green),transparent);transform:scaleX(0);transform-origin:left;transition:transform 0.3s}
+    .area-card:hover::before{transform:scaleX(1)}
+    .area-card:hover{border-color:var(--border-green);transform:translateY(-3px)}
+    .area-icon{font-size:1.5rem;margin-bottom:0.75rem}
+    .area-title{font-family:'Fredoka One',cursive;font-size:1rem;color:var(--text-heading);margin-bottom:0.5rem;letter-spacing:0.03em}
+    .area-desc{font-size:0.8rem;color:var(--text-muted);line-height:1.6}
+
+    /* STEPS */
+    .steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:2rem;margin-top:3rem}
+    .step{background:var(--bg-card);border:1px solid var(--border);border-radius:8px;padding:2rem;transition:border-color 0.3s,transform 0.3s}
+    .step:hover{border-color:var(--border-green);transform:translateY(-4px)}
+    .step-number{font-family:'Pacifico',cursive;font-size:3rem;background:linear-gradient(135deg,var(--green),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1;margin-bottom:1rem}
+    .step-title{font-family:'Fredoka One',cursive;font-size:1.15rem;color:var(--text-heading);margin-bottom:0.75rem;letter-spacing:0.03em}
+    .step-body{font-size:0.9rem;line-height:1.8;color:var(--text-muted)}
+
+    /* FEES */
+    .fees-box{background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:2.5rem;margin-top:3rem;position:relative;overflow:hidden}
+    .fees-box::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--green),var(--gold))}
+    .fee-range{font-family:'Pacifico',cursive;font-size:clamp(2rem,5vw,3.5rem);background:linear-gradient(135deg,var(--green),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:1rem}
+    .fee-note{font-size:0.9rem;color:var(--text-muted);line-height:1.8;max-width:600px}
+    .fee-note strong{color:var(--text)}
+
+    /* RESPONSE */
+    .response-box{background:var(--bg-card);border:1px solid rgba(201,168,76,0.15);border-radius:12px;padding:2.5rem;margin-top:3rem;position:relative;overflow:hidden}
+    .response-box::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--gold),transparent)}
+    .response-times{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1.5rem;margin:2rem 0}
+    .response-time-item{background:var(--bg-card2);border:1px solid var(--border);border-radius:8px;padding:1.5rem}
+    .response-time-label{font-family:'Fredoka One',cursive;font-size:0.75rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--text-muted);margin-bottom:0.5rem}
+    .response-time-value{font-family:'DM Serif Display',serif;font-size:1.6rem;color:var(--text-heading);margin-bottom:0.5rem}
+    .response-time-value.standard{color:var(--green)}
+    .response-time-value.urgent{color:var(--gold)}
+    .response-time-desc{font-size:0.8rem;color:var(--text-muted);line-height:1.6}
+    .response-emphasis{font-size:0.88rem;color:var(--text-muted);line-height:1.8;border-top:1px solid var(--border);padding-top:1.5rem}
+    .response-emphasis strong{color:var(--green)}
+
+    /* SERVICES */
+    .svc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1rem;margin-bottom:0.5rem}
+    .svc-card{background:var(--bg-card);border:1px solid var(--border);border-radius:6px;padding:1.5rem;transition:all 0.3s;position:relative;overflow:hidden;text-decoration:none;color:inherit;display:block}
+    .svc-card::before{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--green),transparent);transform:scaleX(0);transform-origin:left;transition:transform 0.3s}
+    .svc-card:hover::before{transform:scaleX(1)}
+    .svc-card:hover{border-color:var(--border-green);transform:translateY(-3px)}
+    .svc-card-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:0.75rem;gap:0.5rem}
+    .svc-icon{font-size:1.3rem;flex-shrink:0}
+    .svc-live-dot{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 6px rgba(0,204,106,0.6);flex-shrink:0;margin-top:4px;animation:pulse-dot 2s infinite}
+    .svc-title{font-family:'Fredoka One',cursive;font-size:0.95rem;color:var(--text-heading);margin-bottom:0.5rem;letter-spacing:0.02em;line-height:1.3}
+    .svc-situation{font-size:0.8rem;color:var(--gold);font-style:italic;margin-bottom:0.5rem;line-height:1.5}
+    .svc-desc{font-size:0.78rem;color:var(--text-muted);line-height:1.65}
+    .svc-disclaimer-banner{background:var(--disclaimer-bg);border:1px solid var(--disclaimer-border);border-radius:8px;padding:1.25rem 1.75rem;margin-top:3rem}
+    .svc-disclaimer-banner p{font-size:0.8rem;color:var(--text-muted);line-height:1.8}
+    .svc-disclaimer-banner strong{color:var(--gold)}
+
+    /* CONTACT */
+    .contact-box{background:var(--bg-card);border:1px solid var(--border-green);border-radius:12px;padding:2.5rem;margin-top:2rem;text-align:center;position:relative;overflow:hidden}
+    .contact-box::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--green),var(--gold))}
+    .contact-details{display:flex;flex-direction:column;gap:1rem;align-items:center}
+    .contact-item{background:var(--bg-card2);border:1px solid var(--border-green);border-radius:8px;padding:1rem 2rem;min-width:280px}
+    .contact-item-label{font-family:'Fredoka One',cursive;font-size:0.75rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--text-muted);margin-bottom:0.4rem}
+    .contact-item-value{font-size:1rem;color:var(--green)}
+    .contact-note{font-size:0.78rem;color:var(--text-muted);margin-top:1.2rem;line-height:1.7}
+
+    /* FOOTER */
+    footer{border-top:1px solid var(--border);padding:3rem 2rem;text-align:center}
+    .footer-logo{font-family:'Pacifico',cursive;font-size:2rem;background:linear-gradient(135deg,var(--green),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:0.5rem}
+    .footer-tagline{font-family:'Fredoka One',cursive;font-size:0.8rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--text-muted);margin-bottom:2rem}
+    .footer-links{display:flex;gap:2rem;justify-content:center;list-style:none;margin-bottom:2rem;flex-wrap:wrap}
+    .footer-links a{color:var(--text-muted);text-decoration:none;font-size:0.8rem;letter-spacing:0.08em;text-transform:uppercase;transition:color 0.3s;cursor:pointer}
+    .footer-links a:hover{color:var(--green)}
+    .footer-disclaimer{max-width:800px;margin:0 auto 2rem;font-size:0.78rem;color:var(--text-muted);line-height:1.8}
+    .footer-copy{font-size:0.75rem;color:var(--text-muted);opacity:0.5}
+
+    @keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+    .reveal{opacity:0;transform:translateY(30px);transition:opacity 0.7s ease,transform 0.7s ease}
+    .reveal.visible{opacity:1;transform:translateY(0)}
+
+    @media(max-width:768px){
+      nav{padding:1rem 1.5rem}.nav-links{display:none}.hamburger{display:flex}
+      .hero{padding:7rem 1.5rem 3rem}
+      section{padding:4rem 1.5rem}
+      .teaser-section{padding:0 1.5rem 3rem}
+      .slideshow-wrapper{padding:2rem 1.5rem}
+      .fees-box,.response-box,.contact-box{padding:1.5rem}
+      .svc-grid{grid-template-columns:1fr}
+      .teaser-slide{flex-direction:column;padding:2rem 1.5rem;gap:1.5rem;text-align:center}
+      .teaser-illustration{width:120px;height:100px}
+      .teaser-illustration svg{width:72px;height:72px}
+      .teaser-content{text-align:center}
+      .teaser-cta{justify-content:center}
     }
   </style>
 </head>
 <body>
+<div class="scroll-line" id="scrollLine"></div>
 
-  <div class="scroll-line" id="scrollLine"></div>
-
-  <!-- NAV -->
-  <nav>
-    <div class="nav-logo">Attie</div>
-    <div class="nav-right">
-      <ul class="nav-links">
-        <li><a href="#why">Why Attie</a></li>
-        <li><a href="#areas">Practice Areas</a></li>
-        <li><a href="#query">Submit a Query</a></li>
-        <li><a href="#fees">Fees</a></li>
-        <li><a href="#contact">Contact Us</a></li>
-      </ul>
-      <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" title="Toggle light/dark mode">
-        <span id="themeIcon">☀️</span>
-      </button>
-    </div>
-  </nav>
-
-  <!-- 1. HERO -->
-  <div class="hero">
-    <h1 class="hero-title">Attie</h1>
-    <p class="hero-eyebrow">Your Digital Law Office</p>
-    <p class="hero-statement">
-      We are in the age of AI. Getting <em>legal guidance</em> should not depend on whether your question gets picked on a TV segment.
-    </p>
-    <p class="hero-substatement">
-      For too long, Filipinos needing legal help were limited to waiting in line at legal aid offices, hoping to catch a free advice segment on radio, or simply going without — because they could not afford a lawyer. That gap ends here.
-    </p>
-    <div class="hero-cta">
-      <a href="#query" class="btn-primary">Submit a Query</a>
-      <a href="#why" class="btn-secondary">Learn More</a>
-    </div>
-  </div>
-
-  <!-- 2. SLIDESHOW — Why Attie Exists -->
-  <section>
-    <div class="divider"></div>
-    <div class="slideshow-wrapper reveal">
-
-      <!-- Slide 1: The Problem -->
-      <div class="slide active" id="slide1">
-        <p class="slide-label">The Problem</p>
-        <p class="slide-quote">"Your legal rights do not disappear because you cannot afford a lawyer. <span>Attie exists to close that gap.</span>"</p>
-        <p class="slide-body">Millions of Filipinos face legal problems every day — disputes with employers, landlords, family members, government agencies. Most of them never get answers. Not because the law does not protect them. But because <strong>access to legal information has always been inconvenient, expensive, and slow.</strong></p>
-      </div>
-
-      <!-- Slide 2: Why Attie Was Made -->
-      <div class="slide" id="slide2">
-        <p class="slide-label">Why Attie Was Made</p>
-        <p class="slide-quote">"You should not have to post on TikTok, call a radio station, or wait months <span>just to get a legal question answered.</span>"</p>
-        <p class="slide-body">Attie was built out of a simple frustration: the platforms that exist for legal help are either inaccessible, too slow, or built for lawyers — not for the people who actually need answers. <strong>There was no efficient, convenient, and reliable platform for everyday Filipinos to get legal information.</strong> Attie is that platform.</p>
-      </div>
-
-      <!-- Slide 3: The Smarter Model -->
-      <div class="slide" id="slide3">
-        <p class="slide-label">The Smarter Model</p>
-        <p class="slide-quote">"You are not paying less. <span>You are paying right.</span>"</p>
-        <p class="slide-body">A lawyer's consultation fee covers more than just legal knowledge — part of what you pay has nothing to do with your question. It goes to the office rent, the fare, the food, and the time it takes to get to your consultation. With Attie, those costs disappear. You pay for the legal information. That is it. <strong>Attie is not cheap. It is efficient.</strong></p>
-      </div>
-
-      <!-- Slide 4: Why It's Different -->
-      <div class="slide" id="slide4">
-        <p class="slide-label">Why It's Different</p>
-        <p class="slide-quote">"Not just faster. <span>Actually reliable.</span>"</p>
-        <p class="slide-body">Speed without accuracy is useless in law. Attie is built differently — every response goes through AI-assisted legal research, reviewed and finalized by a licensed Filipino lawyer before it reaches you. <strong>You get the efficiency of technology and the reliability of a real lawyer.</strong> Not one or the other. Both.</p>
-      </div>
-
-      <!-- Slide 5: Why AI -->
-      <div class="slide" id="slide5">
-        <p class="slide-label">Why AI</p>
-        <p class="slide-quote">"Using AI is not wrong. <span>Using it incorrectly is.</span>"</p>
-        <p class="slide-body">AI in legal research is not unlike the internet in the early 2000s — people were skeptical, unsure, and cautious. But those who learned to use it correctly gained an enormous advantage. <strong>Attie uses AI because it makes legal research faster, more consistent, and more thorough.</strong> But a lawyer still reads every response. AI assists. The lawyer decides. That is the difference between using AI correctly and using it blindly.</p>
-      </div>
-
-      <!-- Slide navigation -->
-      <div class="slide-nav">
-        <button class="slide-dot active" onclick="goToSlide(1)"></button>
-        <button class="slide-dot" onclick="goToSlide(2)"></button>
-        <button class="slide-dot" onclick="goToSlide(3)"></button>
-        <button class="slide-dot" onclick="goToSlide(4)"></button>
-        <button class="slide-dot" onclick="goToSlide(5)"></button>
-        <button class="slide-arrow" onclick="nextSlide()">→</button>
-      </div>
-    </div>
-  </section>
-
-  <!-- 3. WHAT MAKES IT DIFFERENT -->
-  <section id="why">
-    <p class="section-label reveal">Why Attie</p>
-    <h2 class="section-title reveal">What Makes This <em>Different</em></h2>
-    <div class="trust-grid">
-      <div class="trust-item reveal">
-        <div class="trust-dot"></div>
-        <div class="trust-text">
-          <h4>Lawyer Reviewed — Not AI Alone</h4>
-          <p>Every response is reviewed by a licensed Filipino lawyer before it reaches you. AI handles the research. A lawyer decides the answer.</p>
-        </div>
-      </div>
-      <div class="trust-item reveal">
-        <div class="trust-dot"></div>
-        <div class="trust-text">
-          <h4>Your Identity Is Protected</h4>
-          <p>You may remain anonymous. Use a nickname or alias. Your information is never shared with anyone outside of Attie.</p>
-        </div>
-      </div>
-      <div class="trust-item reveal">
-        <div class="trust-dot"></div>
-        <div class="trust-text">
-          <h4>No Retainer Required</h4>
-          <p>Pay only for what you need. No monthly fees, no hidden charges, no office visits.</p>
-        </div>
-      </div>
-      <div class="trust-item reveal">
-        <div class="trust-dot"></div>
-        <div class="trust-text">
-          <h4>Grounded in Philippine Law</h4>
-          <p>Every query is processed using AI-assisted legal research, reviewed and finalized by a licensed Filipino lawyer — grounded in Philippine statutes, Rules of Court, and jurisprudence.</p>
-        </div>
-      </div>
-      <div class="trust-item reveal">
-        <div class="trust-dot"></div>
-        <div class="trust-text">
-          <h4>English and Filipino</h4>
-          <p>Communicate in whichever language you are most comfortable with. We work in both.</p>
-        </div>
-      </div>
-      <div class="trust-item reveal">
-        <div class="trust-dot"></div>
-        <div class="trust-text">
-          <h4>Steers You in the Right Direction</h4>
-          <p>Attie gives you the legal information you need to make informed decisions — not to replace a lawyer, but to help you understand where you stand.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- 4. PRACTICE AREAS -->
-  <section id="areas">
-    <p class="section-label reveal">What We Cover</p>
-    <h2 class="section-title reveal">Practice <em>Areas</em></h2>
-    <p class="section-body reveal">Not sure which category applies to your concern? Select the closest one or click "Not Sure." We will figure it out from there.</p>
-    <div class="areas">
-      <a href="https://forms.gle/5HLrigHwL9BxziWs6" target="_blank" class="area-card reveal">
-        <div class="area-icon">⚖️</div>
-        <div class="area-title">Civil</div>
-        <p class="area-desc">Contracts, property disputes, inheritance, family law, annulment, legal separation.</p>
-      </a>
-      <a href="https://forms.gle/5HLrigHwL9BxziWs6" target="_blank" class="area-card reveal">
-        <div class="area-icon">🔒</div>
-        <div class="area-title">Criminal</div>
-        <p class="area-desc">Filing complaints, charges, arrest rights, bail, criminal procedure.</p>
-      </a>
-      <a href="https://forms.gle/5HLrigHwL9BxziWs6" target="_blank" class="area-card reveal">
-        <div class="area-icon">💼</div>
-        <div class="area-title">Labor & Employment</div>
-        <p class="area-desc">Illegal dismissal, unpaid wages, NLRC filing, employment contracts.</p>
-      </a>
-      <a href="https://forms.gle/5HLrigHwL9BxziWs6" target="_blank" class="area-card reveal">
-        <div class="area-icon">🏢</div>
-        <div class="area-title">Corporate & Business</div>
-        <p class="area-desc">Business registration, partnership disputes, contracts, SEC matters.</p>
-      </a>
-      <a href="https://forms.gle/5HLrigHwL9BxziWs6" target="_blank" class="area-card reveal">
-        <div class="area-icon">🏛️</div>
-        <div class="area-title">Court Procedure</div>
-        <p class="area-desc">How to file cases, deadlines, small claims, court processes and requirements.</p>
-      </a>
-      <a href="https://forms.gle/5HLrigHwL9BxziWs6" target="_blank" class="area-card reveal">
-        <div class="area-icon">📋</div>
-        <div class="area-title">Government & Administrative</div>
-        <p class="area-desc">Government permits, administrative complaints, agency processes.</p>
-      </a>
-    </div>
-  </section>
-
-  <!-- 5. HOW IT WORKS -->
-  <section id="how">
-    <p class="section-label reveal">The Process</p>
-    <h2 class="section-title reveal">How <em>Attie</em> Works</h2>
-    <p class="section-body reveal">Three steps. No office visit. No retainer required.</p>
-    <div class="steps">
-      <div class="step reveal">
-        <div class="step-number">1</div>
-        <div class="step-title">Submit Your Query</div>
-        <p class="step-body">Select your area of concern and fill out our secure query form. Tell us what happened, who is involved, where, and when. No legal terms needed — just share what you truthfully know.</p>
-      </div>
-      <div class="step reveal">
-        <div class="step-number">2</div>
-        <div class="step-title">We Review Your Concern</div>
-        <p class="step-body">Your query is processed using AI-assisted legal research, reviewed and finalized by a licensed Filipino lawyer. You receive a real, considered answer — not a raw AI output.</p>
-      </div>
-      <div class="step reveal">
-        <div class="step-number">3</div>
-        <div class="step-title">Receive Your Response</div>
-        <p class="step-body">Your lawyer-reviewed response is sent to your email. Clear, practical, and grounded in Philippine law — designed to steer you in the right direction.</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- 6. GET STARTED -->
-  <section id="query">
-    <p class="section-label reveal">Get Started</p>
-    <h2 class="section-title reveal">Submit Your <em>Query</em></h2>
-    <p class="section-body reveal">Select your area of concern below. You will be directed to our secure query form where you can describe your situation, complete payment, and upload documents.</p>
-
-    <div class="areas" style="margin-top:2rem;">
-      <a href="https://forms.gle/5HLrigHwL9BxziWs6" target="_blank" class="area-card reveal">
-        <div class="area-icon">⚖️</div>
-        <div class="area-title">Civil</div>
-        <p class="area-desc">Contracts, property disputes, inheritance, family law, annulment, legal separation.</p>
-      </a>
-      <a href="https://forms.gle/5HLrigHwL9BxziWs6" target="_blank" class="area-card reveal">
-        <div class="area-icon">🔒</div>
-        <div class="area-title">Criminal</div>
-        <p class="area-desc">Filing complaints, charges, arrest rights, bail, criminal procedure.</p>
-      </a>
-      <a href="https://forms.gle/5HLrigHwL9BxziWs6" target="_blank" class="area-card reveal">
-        <div class="area-icon">💼</div>
-        <div class="area-title">Labor & Employment</div>
-        <p class="area-desc">Illegal dismissal, unpaid wages, NLRC filing, employment contracts.</p>
-      </a>
-      <a href="https://forms.gle/5HLrigHwL9BxziWs6" target="_blank" class="area-card reveal">
-        <div class="area-icon">🏢</div>
-        <div class="area-title">Corporate & Business</div>
-        <p class="area-desc">Business registration, partnership disputes, contracts, SEC matters.</p>
-      </a>
-      <a href="https://forms.gle/5HLrigHwL9BxziWs6" target="_blank" class="area-card reveal">
-        <div class="area-icon">🏛️</div>
-        <div class="area-title">Court Procedure</div>
-        <p class="area-desc">How to file cases, deadlines, small claims, court processes and requirements.</p>
-      </a>
-      <a href="https://forms.gle/5HLrigHwL9BxziWs6" target="_blank" class="area-card reveal">
-        <div class="area-icon">📋</div>
-        <div class="area-title">Government & Administrative</div>
-        <p class="area-desc">Government permits, administrative complaints, agency processes.</p>
-      </a>
-      <a href="https://forms.gle/5HLrigHwL9BxziWs6" target="_blank" class="area-card reveal" style="grid-column: 1 / -1;">
-        <div class="area-icon">❓</div>
-        <div class="area-title">Not Sure</div>
-        <p class="area-desc">Not sure which category applies? Click here and describe your situation. We will figure it out.</p>
-      </a>
-    </div>
-
-    <p class="section-body reveal" style="margin-top:1.5rem;font-size:0.85rem;">
-      Clicking any category opens our secure query form in a new tab. Your information is kept strictly confidential. — <em>Ang pag-click sa alinmang kategorya ay magbubukas ng aming secure na form sa bagong tab.</em>
-    </p>
-  </section>
-
-  <!-- 7. FEES -->
-  <section id="fees">
-    <p class="section-label reveal">Transparent Pricing</p>
-    <h2 class="section-title reveal">Simple, <em>Affordable</em> Fees</h2>
-    <div class="fees-box reveal">
-      <div class="fee-range">₱399 — ₱899</div>
-      <p class="fee-note">
-        Pricing is determined by the <strong>complexity of your concern</strong> and whether <strong>document review</strong> is involved. No hidden charges. No retainer. Pay only for what you need.<br><br>
-        Payment is accepted via <strong>GCash</strong> or <strong>bank transfer.</strong> Payment instructions will be sent upon submission of the query form.<br><br>
-        It is that simple — complete the query form, submit, pay the fee, and receive your lawyer-reviewed response.<br><br>
-        <em>Ang bayarin ay naaayon sa kumplikasyon ng iyong alalahanin at kung kinakailangan ang pagsusuri ng mga dokumento. Walang nakatagong bayarin.</em>
-      </p>
-    </div>
-  </section>
-
-  <!-- 8. RESPONSE TIME -->
-  <section id="response">
-    <p class="section-label reveal">Response Time</p>
-    <h2 class="section-title reveal">When to <em>Expect</em> Your Answer</h2>
-    <div class="response-box reveal">
-      <div class="response-times">
-        <div class="response-time-item">
-          <div class="response-time-label">Standard Query</div>
-          <div class="response-time-value standard">Within 24 Hours</div>
-          <p class="response-time-desc">For general legal questions, rights clarification, and concerns that do not require immediate action.</p>
-        </div>
-        <div class="response-time-item">
-          <div class="response-time-label">Urgent Query</div>
-          <div class="response-time-value urgent">Within 2–4 Hours</div>
-          <p class="response-time-desc">For time-sensitive concerns with upcoming hearings, expiring deadlines, or situations requiring immediate legal guidance.</p>
-        </div>
-      </div>
-      <div class="response-emphasis">
-        <strong>Why does it take time?</strong> Attie's responses are not instant AI outputs. Every query is processed using AI-assisted legal research, reviewed and finalized by a licensed Philippine lawyer to ensure accuracy and consistency with applicable statutes, rules, and jurisprudence. The lawyer review is non-negotiable — it is what makes Attie reliable.<br><br>
-        <em style="color:var(--text-muted);">Ang bawat sagot ay sinusuri ng isang lisensyadong abogadong Pilipino bago ipadala — para masiguro ang katumpakan at konsistensya sa batas.</em>
-      </div>
-    </div>
-  </section>
-
-  <!-- 9. CONTACT US -->
-  <section id="contact">
-    <p class="section-label reveal">Get In Touch</p>
-    <h2 class="section-title reveal">Contact <em>Us</em></h2>
-    <p class="section-body reveal">For general inquiries about our service before submitting a query.</p>
-    <div class="contact-box reveal" style="text-align:center;">
-      <button class="btn-primary" id="revealBtn" onclick="revealContact()">Show Contact Details</button>
-      <div id="contactDetails" style="display:none;">
-        <div class="contact-details" style="margin-top:1.5rem;">
-          <div class="contact-item">
-            <div class="contact-item-label">Email</div>
-            <div class="contact-item-value">attie.dlo.ph@gmail.com</div>
-          </div>
-          <div class="contact-item">
-            <div class="contact-item-label">Contact Number</div>
-            <div class="contact-item-value">0998 857 8171</div>
-          </div>
-          <div class="contact-item">
-            <div class="contact-item-label">Facebook</div>
-            <div class="contact-item-value"><a href="https://www.facebook.com/profile.php?id=61583574324732" target="_blank" style="color:var(--green);text-decoration:none;">Attie — Digital Law Office</a></div>
-          </div>
-        </div>
-        <p class="contact-note">
-          For general inquiries only. To submit a legal query, please use the query form above.<br>
-          <em>Para sa mga pangkalahatang katanungan lamang. Para sa legal na query, gamitin ang form sa itaas.</em>
-        </p>
-      </div>
-    </div>
-  </section>
-
-  <!-- FOOTER -->
-  <footer>
-    <div class="footer-logo">Attie</div>
-    <div class="footer-tagline">Your Digital Law Office · Philippines</div>
-    <ul class="footer-links">
+<!-- NAV -->
+<nav>
+  <div class="nav-logo" onclick="scrollTo({top:0,behavior:'smooth'})">Attie</div>
+  <div class="nav-right">
+    <ul class="nav-links">
       <li><a href="#why">Why Attie</a></li>
       <li><a href="#areas">Practice Areas</a></li>
+      <li><a href="#services" class="nav-tools">Tools &amp; Services</a></li>
       <li><a href="#query">Submit a Query</a></li>
       <li><a href="#fees">Fees</a></li>
-      <li><a href="#response">Response Time</a></li>
       <li><a href="#contact">Contact Us</a></li>
     </ul>
-    <p class="footer-disclaimer">
-      Attie provides AI-assisted legal information reviewed by a licensed Philippine lawyer. Responses are not formal legal advice, do not constitute a legal opinion or recommendation, and do not create an attorney-client relationship. The purpose of this service is to steer you in the right direction in handling or deciding on your legal concern — not to substitute formal legal representation. Attie operates as a limited legal services provider. The scope of service is strictly confined to the specific query submitted. Responses are not conclusive or final and may change depending on facts and circumstances not fully known at the time of the query. No continuing legal representation is established by use of this service. All information shared with Attie is kept strictly confidential.
-    </p>
-    <p class="footer-copy">© 2026 Attie Digital Law Office. All rights reserved.</p>
-  </footer>
+    <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()"><span id="themeIcon">&#9728;&#65039;</span></button>
+    <button class="hamburger" id="hamburger" onclick="toggleMenu()"><span></span><span></span><span></span></button>
+  </div>
+</nav>
 
-  <script>
-    function revealContact() {
-      document.getElementById('contactDetails').style.display = 'block';
-      document.getElementById('contactDetails').style.animation = 'fadeUp 0.5s forwards';
-      document.getElementById('revealBtn').style.display = 'none';
-    }
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#why" onclick="toggleMenu()">Why Attie</a>
+  <a href="#areas" onclick="toggleMenu()">Practice Areas</a>
+  <a href="#services" class="nav-tools" onclick="toggleMenu()">Tools &amp; Services</a>
+  <a href="#query" onclick="toggleMenu()">Submit a Query</a>
+  <a href="#fees" onclick="toggleMenu()">Fees</a>
+  <a href="#contact" onclick="toggleMenu()">Contact Us</a>
+</div>
 
-    // Scroll progress
-    window.addEventListener('scroll', () => {
-      const pct = (window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100;
-      document.getElementById('scrollLine').style.width = pct + '%';
-    });
+<!-- 1. HERO -->
+<div class="hero">
+  <h1 class="hero-title">Attie</h1>
+  <p class="hero-eyebrow">Your Digital Law Office</p>
+  <p class="hero-statement">We are in the age of AI. Getting <em>legal guidance</em> should not depend on whether your question gets picked on a TV segment.</p>
+  <p class="hero-substatement">For too long, Filipinos needing legal help were limited to waiting in line at legal aid offices, hoping to catch a free advice segment on radio, or simply going without — because they could not afford a lawyer. That gap ends here.</p>
+  <div class="hero-cta">
+    <a href="#query" class="btn-primary">Submit a Query</a>
+    <a href="#why" class="btn-secondary">Learn More</a>
+  </div>
+</div>
 
-    // Reveal on scroll
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
-    }, { threshold: 0.1 });
-    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+<!-- 2. WHY ATTIE SLIDESHOW -->
+<section>
+  <div class="divider"></div>
+  <div class="slideshow-wrapper reveal">
+    <div class="slide active" id="slide1"><p class="slide-label">The Problem</p><p class="slide-quote">"Your legal rights do not disappear because you cannot afford a lawyer. <span>Attie exists to close that gap.</span>"</p><p class="slide-body">Millions of Filipinos face legal problems every day — disputes with employers, landlords, family members, government agencies. Most of them never get answers. Not because the law does not protect them. But because <strong>access to legal information has always been inconvenient, expensive, and slow.</strong></p></div>
+    <div class="slide" id="slide2"><p class="slide-label">Why Attie Was Made</p><p class="slide-quote">"You should not have to post on TikTok, call a radio station, or wait months <span>just to get a legal question answered.</span>"</p><p class="slide-body">Attie was built out of a simple frustration: the platforms that exist for legal help are either inaccessible, too slow, or built for lawyers — not for the people who actually need answers. <strong>There was no efficient, convenient, and reliable platform for everyday Filipinos to get legal information.</strong> Attie is that platform.</p></div>
+    <div class="slide" id="slide3"><p class="slide-label">The Smarter Model</p><p class="slide-quote">"You are not paying less. <span>You are paying right.</span>"</p><p class="slide-body">A lawyer's consultation fee covers more than just legal knowledge — part of what you pay has nothing to do with your question. It goes to the office rent, the fare, the food, and the time it takes to get to your consultation. With Attie, those costs disappear. <strong>Attie is not cheap. It is efficient.</strong></p></div>
+    <div class="slide" id="slide4"><p class="slide-label">Why It's Different</p><p class="slide-quote">"Not just faster. <span>Actually reliable.</span>"</p><p class="slide-body">Speed without accuracy is useless in law. Attie is built differently — every response goes through AI-assisted legal research, reviewed and finalized by a licensed Filipino lawyer before it reaches you. <strong>You get the efficiency of technology and the reliability of a real lawyer.</strong> Not one or the other. Both.</p></div>
+    <div class="slide" id="slide5"><p class="slide-label">Why AI</p><p class="slide-quote">"Using AI is not wrong. <span>Using it incorrectly is.</span>"</p><p class="slide-body">AI in legal research is not unlike the internet in the early 2000s — people were skeptical, unsure, and cautious. But those who learned to use it correctly gained an enormous advantage. <strong>Attie uses AI because it makes legal research faster, more consistent, and more thorough.</strong> But a lawyer still reads every response. AI assists. The lawyer decides.</p></div>
+    <div class="slide-nav">
+      <button class="slide-dot active" onclick="goToSlide(1)"></button>
+      <button class="slide-dot" onclick="goToSlide(2)"></button>
+      <button class="slide-dot" onclick="goToSlide(3)"></button>
+      <button class="slide-dot" onclick="goToSlide(4)"></button>
+      <button class="slide-dot" onclick="goToSlide(5)"></button>
+      <button class="slide-arrow" onclick="nextSlide()">&#8594;</button>
+    </div>
+  </div>
+</section>
 
-    // Theme toggle
-    function toggleTheme() {
-      const html = document.documentElement;
-      const isDark = html.getAttribute('data-theme') === 'dark';
-      html.setAttribute('data-theme', isDark ? 'light' : 'dark');
-      document.getElementById('themeIcon').textContent = isDark ? '🌙' : '☀️';
-      localStorage.setItem('attie-theme', isDark ? 'light' : 'dark');
-    }
+<!-- 3. TOOL TEASER CAROUSEL (standalone section, JS scroll only, no href) -->
+<div class="teaser-section reveal">
+  <div class="teaser-label">Explore Attie Tools</div>
+  <div class="teaser-track-wrap" onclick="scrollToServices()">
+    <div class="teaser-track" id="teaserTrack">
 
-    // Restore saved theme
-    const savedTheme = localStorage.getItem('attie-theme');
-    if (savedTheme) {
-      document.documentElement.setAttribute('data-theme', savedTheme);
-      document.getElementById('themeIcon').textContent = savedTheme === 'light' ? '🌙' : '☀️';
-    }
+      <div class="teaser-slide">
+        <div class="teaser-illustration">
+          <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="12" y="20" width="76" height="68" rx="8" stroke="#00cc6a" stroke-width="3"/>
+            <rect x="12" y="20" width="76" height="22" rx="8" fill="rgba(0,204,106,0.12)"/>
+            <line x1="12" y1="42" x2="88" y2="42" stroke="#00cc6a" stroke-width="2"/>
+            <rect x="30" y="10" width="8" height="18" rx="4" fill="#c9a84c"/>
+            <rect x="62" y="10" width="8" height="18" rx="4" fill="#c9a84c"/>
+            <circle cx="62" cy="66" r="18" fill="rgba(0,204,106,0.08)" stroke="#00cc6a" stroke-width="2.5"/>
+            <line x1="62" y1="55" x2="62" y2="66" stroke="#00cc6a" stroke-width="2.5" stroke-linecap="round"/>
+            <line x1="62" y1="66" x2="70" y2="72" stroke="#c9a84c" stroke-width="2.5" stroke-linecap="round"/>
+            <circle cx="62" cy="66" r="2.5" fill="#00cc6a"/>
+            <rect x="22" y="52" width="10" height="8" rx="2" fill="rgba(0,204,106,0.2)"/>
+            <rect x="36" y="52" width="10" height="8" rx="2" fill="rgba(0,204,106,0.2)"/>
+          </svg>
+        </div>
+        <div class="teaser-content">
+          <div class="teaser-badge"><span class="teaser-badge-live"></span>Live Now</div>
+          <div class="teaser-tool-name">Deadline Calculator</div>
+          <p class="teaser-oneliner">Know exactly when your legal deadline falls — down to the day, with Philippine holidays already excluded.</p>
+          <div class="teaser-cta">View all tools &nbsp;<span class="teaser-cta-arrow">&#8595;</span></div>
+        </div>
+      </div>
 
-    // Slideshow
-    let currentSlide = 1;
-    const totalSlides = 5;
-    let slideTimer;
+      <div class="teaser-slide">
+        <div class="teaser-illustration">
+          <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="50" cy="30" r="16" stroke="#00cc6a" stroke-width="3" fill="rgba(0,204,106,0.08)"/>
+            <circle cx="50" cy="30" r="7" fill="#00cc6a" opacity="0.3"/>
+            <path d="M20 80 C20 62 80 62 80 80" stroke="#00cc6a" stroke-width="3" stroke-linecap="round" fill="none"/>
+            <path d="M50 58 L44 68 L50 65 L56 68 Z" fill="#c9a84c"/>
+            <path d="M50 58 L50 78" stroke="#c9a84c" stroke-width="2.5" stroke-linecap="round"/>
+            <path d="M44 63 L56 63" stroke="#c9a84c" stroke-width="2.5" stroke-linecap="round"/>
+            <circle cx="78" cy="72" r="14" fill="rgba(0,204,106,0.1)" stroke="#00cc6a" stroke-width="2"/>
+            <path d="M72 72 L76 76 L84 68" stroke="#00cc6a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div class="teaser-content">
+          <div class="teaser-badge">Employee Rights</div>
+          <div class="teaser-tool-name">Employee Rights Checker</div>
+          <p class="teaser-oneliner">Tanggal ka bigla? Find out if your dismissal was legal and what you are owed — 13th month, final pay, separation pay.</p>
+          <div class="teaser-cta">View all tools &nbsp;<span class="teaser-cta-arrow">&#8595;</span></div>
+        </div>
+      </div>
 
-    function goToSlide(n) {
-      document.getElementById('slide' + currentSlide).classList.remove('active');
-      document.querySelectorAll('.slide-dot')[currentSlide - 1].classList.remove('active');
-      currentSlide = n;
-      document.getElementById('slide' + currentSlide).classList.add('active');
-      document.querySelectorAll('.slide-dot')[currentSlide - 1].classList.add('active');
-      resetTimer();
-    }
+      <div class="teaser-slide">
+        <div class="teaser-illustration">
+          <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="20" y="18" width="60" height="72" rx="7" stroke="#00cc6a" stroke-width="3" fill="rgba(0,204,106,0.05)"/>
+            <rect x="30" y="14" width="40" height="14" rx="4" fill="rgba(0,204,106,0.15)" stroke="#00cc6a" stroke-width="2"/>
+            <line x1="30" y1="44" x2="70" y2="44" stroke="rgba(0,204,106,0.3)" stroke-width="1.5"/>
+            <line x1="30" y1="56" x2="70" y2="56" stroke="rgba(0,204,106,0.3)" stroke-width="1.5"/>
+            <line x1="30" y1="68" x2="55" y2="68" stroke="rgba(0,204,106,0.3)" stroke-width="1.5"/>
+            <circle cx="70" cy="70" r="15" fill="rgba(201,168,76,0.15)" stroke="#c9a84c" stroke-width="2.5"/>
+            <line x1="70" y1="63" x2="70" y2="77" stroke="#c9a84c" stroke-width="2.5" stroke-linecap="round"/>
+            <line x1="63" y1="70" x2="77" y2="70" stroke="#c9a84c" stroke-width="2.5" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="teaser-content">
+          <div class="teaser-badge">HMO &amp; Insurance</div>
+          <div class="teaser-tool-name">HMO Claims Checker</div>
+          <p class="teaser-oneliner">Tinanggihan ng HMO ang claim? A denial is not the final word. Know exactly where to escalate and how.</p>
+          <div class="teaser-cta">View all tools &nbsp;<span class="teaser-cta-arrow">&#8595;</span></div>
+        </div>
+      </div>
 
-    function nextSlide() {
-      goToSlide(currentSlide === totalSlides ? 1 : currentSlide + 1);
-    }
+      <div class="teaser-slide">
+        <div class="teaser-illustration">
+          <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="30" y="12" width="40" height="70" rx="8" stroke="#00cc6a" stroke-width="3" fill="rgba(0,204,106,0.05)"/>
+            <rect x="38" y="18" width="24" height="4" rx="2" fill="rgba(0,204,106,0.3)"/>
+            <circle cx="50" cy="72" r="4" fill="rgba(0,204,106,0.4)" stroke="#00cc6a" stroke-width="1.5"/>
+            <line x1="37" y1="30" x2="63" y2="30" stroke="rgba(0,204,106,0.2)" stroke-width="1.5"/>
+            <line x1="37" y1="38" x2="63" y2="38" stroke="rgba(0,204,106,0.2)" stroke-width="1.5"/>
+            <circle cx="72" cy="35" r="16" fill="rgba(201,168,76,0.12)" stroke="#c9a84c" stroke-width="2.5"/>
+            <line x1="72" y1="27" x2="72" y2="38" stroke="#c9a84c" stroke-width="3" stroke-linecap="round"/>
+            <circle cx="72" cy="43" r="2.5" fill="#c9a84c"/>
+          </svg>
+        </div>
+        <div class="teaser-content">
+          <div class="teaser-badge">Online Lending</div>
+          <div class="teaser-tool-name">Lending App Abuse Checker</div>
+          <p class="teaser-oneliner">Nino-notify ang contacts mo? Shaming you publicly is illegal. Know which agency to report them to.</p>
+          <div class="teaser-cta">View all tools &nbsp;<span class="teaser-cta-arrow">&#8595;</span></div>
+        </div>
+      </div>
 
-    function resetTimer() {
-      clearInterval(slideTimer);
-      slideTimer = setInterval(nextSlide, 15000);
-    }
+      <div class="teaser-slide">
+        <div class="teaser-illustration">
+          <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M15 28 L22 28 L30 60 L75 60 L82 36 L30 36" stroke="#00cc6a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+            <circle cx="38" cy="70" r="6" stroke="#00cc6a" stroke-width="2.5" fill="rgba(0,204,106,0.15)"/>
+            <circle cx="65" cy="70" r="6" stroke="#00cc6a" stroke-width="2.5" fill="rgba(0,204,106,0.15)"/>
+            <circle cx="70" cy="30" r="18" fill="rgba(201,168,76,0.1)" stroke="#c9a84c" stroke-width="2.5"/>
+            <line x1="63" y1="23" x2="77" y2="37" stroke="#c9a84c" stroke-width="2.5" stroke-linecap="round"/>
+            <line x1="77" y1="23" x2="63" y2="37" stroke="#c9a84c" stroke-width="2.5" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="teaser-content">
+          <div class="teaser-badge">Online Shopping</div>
+          <div class="teaser-tool-name">E-Commerce Scam Generator</div>
+          <p class="teaser-oneliner">Na-scam ka sa Shopee, Lazada, or Facebook Marketplace? Generate a formal complaint to the right agency in one step.</p>
+          <div class="teaser-cta">View all tools &nbsp;<span class="teaser-cta-arrow">&#8595;</span></div>
+        </div>
+      </div>
 
-    slideTimer = setInterval(nextSlide, 15000);
-  </script>
+      <div class="teaser-slide">
+        <div class="teaser-illustration">
+          <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <ellipse cx="50" cy="50" rx="38" ry="20" stroke="#00cc6a" stroke-width="2.5" fill="none"/>
+            <ellipse cx="50" cy="50" rx="18" ry="20" stroke="rgba(0,204,106,0.4)" stroke-width="1.5" fill="none"/>
+            <circle cx="50" cy="50" r="8" fill="rgba(0,204,106,0.2)" stroke="#00cc6a" stroke-width="2"/>
+            <circle cx="50" cy="50" r="3.5" fill="#00cc6a"/>
+            <line x1="50" y1="30" x2="50" y2="70" stroke="rgba(0,204,106,0.25)" stroke-width="1.5"/>
+            <rect x="60" y="58" width="22" height="28" rx="5" fill="rgba(201,168,76,0.12)" stroke="#c9a84c" stroke-width="2"/>
+            <path d="M65 58 L65 52 Q65 44 71 44 Q77 44 77 52 L77 58" stroke="#c9a84c" stroke-width="2" fill="none" stroke-linecap="round"/>
+            <rect x="68" y="67" width="6" height="6" rx="1.5" fill="#c9a84c" opacity="0.6"/>
+          </svg>
+        </div>
+        <div class="teaser-content">
+          <div class="teaser-badge">Data Privacy</div>
+          <div class="teaser-tool-name">Data Privacy Violation Checker</div>
+          <p class="teaser-oneliner">Your personal data is yours by law. When someone uses it without permission, the National Privacy Commission can act.</p>
+          <div class="teaser-cta">View all tools &nbsp;<span class="teaser-cta-arrow">&#8595;</span></div>
+        </div>
+      </div>
 
+    </div>
+  </div>
+  <div class="teaser-controls">
+    <button class="teaser-prev" onclick="teaserMove(-1)">&#8592;</button>
+    <button class="teaser-dot active" onclick="teaserGo(0)"></button>
+    <button class="teaser-dot" onclick="teaserGo(1)"></button>
+    <button class="teaser-dot" onclick="teaserGo(2)"></button>
+    <button class="teaser-dot" onclick="teaserGo(3)"></button>
+    <button class="teaser-dot" onclick="teaserGo(4)"></button>
+    <button class="teaser-dot" onclick="teaserGo(5)"></button>
+    <button class="teaser-next" onclick="teaserMove(1)">&#8594;</button>
+  </div>
+</div>
+
+<!-- 3. PRACTICE AREAS -->
+<section id="areas">
+  <p class="section-label reveal">What We Cover</p>
+  <h2 class="section-title reveal">Practice <em>Areas</em></h2>
+  <p class="section-body reveal">Not sure which category applies to your concern? Select the closest one or click "Not Sure." We will figure it out from there.</p>
+  <div class="areas">
+    <a href="https://forms.gle/5HLrigHwL9BxziWs6" target="_blank" class="area-card reveal"><div class="area-icon">&#9878;&#65039;</div><div class="area-title">Civil</div><p class="area-desc">Contracts, property disputes, inheritance, family law, annulment, legal separation.</p></a>
+    <a href="https://forms.gle/5HLrigHwL9BxziWs6" target="_blank" class="area-card reveal"><div class="area-icon">&#128274;</div><div class="area-title">Criminal</div><p class="area-desc">Filing complaints, charges, arrest rights, bail, criminal procedure.</p></a>
+    <a href="https://forms.gle/5HLrigHwL9BxziWs6" target="_blank" class="area-card reveal"><div class="area-icon">&#128188;</div><div class="area-title">Labor &amp; Employment</div><p class="area-desc">Illegal dismissal, unpaid wages, NLRC filing, employment contracts.</p></a>
+    <a href="https://forms.gle/5HLrigHwL9BxziWs6" target="_blank" class="area-card reveal"><div class="area-icon">&#127970;</div><div class="area-title">Corporate &amp; Business</div><p class="area-desc">Business registration, partnership disputes, contracts, SEC matters.</p></a>
+    <a href="https://forms.gle/5HLrigHwL9BxziWs6" target="_blank" class="area-card reveal"><div class="area-icon">&#127963;&#65039;</div><div class="area-title">Court Procedure</div><p class="area-desc">How to file cases, deadlines, small claims, court processes and requirements.</p></a>
+    <a href="https://forms.gle/5HLrigHwL9BxziWs6" target="_blank" class="area-card reveal"><div class="area-icon">&#128203;</div><div class="area-title">Government &amp; Administrative</div><p class="area-desc">Government permits, administrative complaints, agency processes.</p></a>
+  </div>
+</section>
+
+<!-- 4. WHY ATTIE -->
+<section id="why">
+  <p class="section-label reveal">Why Attie</p>
+  <h2 class="section-title reveal">What Makes This <em>Different</em></h2>
+  <div class="trust-grid">
+    <div class="trust-item reveal"><div class="trust-dot"></div><div class="trust-text"><h4>Lawyer Reviewed — Not AI Alone</h4><p>Every response is reviewed by a licensed Filipino lawyer before it reaches you. AI handles the research. A lawyer decides the answer.</p></div></div>
+    <div class="trust-item reveal"><div class="trust-dot"></div><div class="trust-text"><h4>Your Identity Is Protected</h4><p>You may remain anonymous. Use a nickname or alias. Your information is never shared with anyone outside of Attie.</p></div></div>
+    <div class="trust-item reveal"><div class="trust-dot"></div><div class="trust-text"><h4>No Retainer Required</h4><p>Pay only for what you need. No monthly fees, no hidden charges, no office visits.</p></div></div>
+    <div class="trust-item reveal"><div class="trust-dot"></div><div class="trust-text"><h4>Grounded in Philippine Law</h4><p>Every query is processed using AI-assisted legal research, reviewed and finalized by a licensed Filipino lawyer — grounded in Philippine statutes, Rules of Court, and jurisprudence.</p></div></div>
+    <div class="trust-item reveal"><div class="trust-dot"></div><div class="trust-text"><h4>English and Filipino</h4><p>Communicate in whichever language you are most comfortable with. We work in both.</p></div></div>
+    <div class="trust-item reveal"><div class="trust-dot"></div><div class="trust-text"><h4>Steers You in the Right Direction</h4><p>Attie gives you the legal information you need to make informed decisions — not to replace a lawyer, but to help you understand where you stand.</p></div></div>
+  </div>
+</section>
+
+<!-- 5. THE PROCESS -->
+<section id="how">
+  <p class="section-label reveal">The Process</p>
+  <h2 class="section-title reveal">How <em>Attie</em> Works</h2>
+  <p class="section-body reveal">Three steps. No office visit. No retainer required.</p>
+  <div class="steps">
+    <div class="step reveal"><div class="step-number">1</div><div class="step-title">Submit Your Query</div><p class="step-body">Select your area of concern and fill out our secure query form. Tell us what happened, who is involved, where, and when. No legal terms needed — just share what you truthfully know.</p></div>
+    <div class="step reveal"><div class="step-number">2</div><div class="step-title">We Review Your Concern</div><p class="step-body">Your query is processed using AI-assisted legal research, reviewed and finalized by a licensed Filipino lawyer. You receive a real, considered answer — not a raw AI output.</p></div>
+    <div class="step reveal"><div class="step-number">3</div><div class="step-title">Receive Your Response</div><p class="step-body">Your lawyer-reviewed response is sent to your email. Clear, practical, and grounded in Philippine law — designed to steer you in the right direction.</p></div>
+  </div>
+</section>
+
+<!-- 6. GET STARTED -->
+<section id="query">
+  <p class="section-label reveal">Get Started</p>
+  <h2 class="section-title reveal">Submit Your <em>Query</em></h2>
+  <p class="section-body reveal">Select your area of concern below. You will be directed to our secure query form where you can describe your situation, complete payment, and upload documents.</p>
+  <div class="areas" style="margin-top:2rem">
+    <a href="https://forms.gle/5HLrigHwL9BxziWs6" target="_blank" class="area-card reveal"><div class="area-icon">&#9878;&#65039;</div><div class="area-title">Civil</div><p class="area-desc">Contracts, property disputes, inheritance, family law, annulment, legal separation.</p></a>
+    <a href="https://forms.gle/5HLrigHwL9BxziWs6" target="_blank" class="area-card reveal"><div class="area-icon">&#128274;</div><div class="area-title">Criminal</div><p class="area-desc">Filing complaints, charges, arrest rights, bail, criminal procedure.</p></a>
+    <a href="https://forms.gle/5HLrigHwL9BxziWs6" target="_blank" class="area-card reveal"><div class="area-icon">&#128188;</div><div class="area-title">Labor &amp; Employment</div><p class="area-desc">Illegal dismissal, unpaid wages, NLRC filing, employment contracts.</p></a>
+    <a href="https://forms.gle/5HLrigHwL9BxziWs6" target="_blank" class="area-card reveal"><div class="area-icon">&#127970;</div><div class="area-title">Corporate &amp; Business</div><p class="area-desc">Business registration, partnership disputes, contracts, SEC matters.</p></a>
+    <a href="https://forms.gle/5HLrigHwL9BxziWs6" target="_blank" class="area-card reveal"><div class="area-icon">&#127963;&#65039;</div><div class="area-title">Court Procedure</div><p class="area-desc">How to file cases, deadlines, small claims, court processes and requirements.</p></a>
+    <a href="https://forms.gle/5HLrigHwL9BxziWs6" target="_blank" class="area-card reveal"><div class="area-icon">&#128203;</div><div class="area-title">Government &amp; Administrative</div><p class="area-desc">Government permits, administrative complaints, agency processes.</p></a>
+    <a href="https://forms.gle/5HLrigHwL9BxziWs6" target="_blank" class="area-card reveal" style="grid-column:1/-1"><div class="area-icon">&#10067;</div><div class="area-title">Not Sure</div><p class="area-desc">Not sure which category applies? Click here and describe your situation. We will figure it out.</p></a>
+  </div>
+  <p class="section-body reveal" style="margin-top:1.5rem;font-size:0.85rem">Clicking any category opens our secure query form in a new tab. Your information is kept strictly confidential. — <em>Ang pag-click sa alinmang kategorya ay magbubukas ng aming secure na form sa bagong tab.</em></p>
+</section>
+
+<!-- 7. FEES -->
+<section id="fees">
+  <p class="section-label reveal">Transparent Pricing</p>
+  <h2 class="section-title reveal">Simple, <em>Affordable</em> Fees</h2>
+  <div class="fees-box reveal">
+    <div class="fee-range">&#8369;399 — &#8369;899</div>
+    <p class="fee-note">Pricing is determined by the <strong>complexity of your concern</strong> and whether <strong>document review</strong> is involved. No hidden charges. No retainer. Pay only for what you need.<br><br>Payment is accepted via <strong>GCash</strong> or <strong>bank transfer.</strong> Payment instructions will be sent upon submission of the query form.<br><br>It is that simple — complete the query form, submit, pay the fee, and receive your lawyer-reviewed response.<br><br><em>Ang fee ay naaayon sa kumplikasyon ng iyong tanong at kung kinakailangan ang pagsusuri ng mga dokumento. Walang hidden charges ito.</em></p>
+  </div>
+</section>
+
+<!-- 8. RESPONSE TIME -->
+<section id="response">
+  <p class="section-label reveal">Response Time</p>
+  <h2 class="section-title reveal">When to <em>Expect</em> Your Answer</h2>
+  <div class="response-box reveal">
+    <div class="response-times">
+      <div class="response-time-item"><div class="response-time-label">Standard Query</div><div class="response-time-value standard">Within 24 Hours</div><p class="response-time-desc">For general legal questions, rights clarification, and concerns that do not require immediate action.</p></div>
+      <div class="response-time-item"><div class="response-time-label">Urgent Query</div><div class="response-time-value urgent">Within 2–4 Hours</div><p class="response-time-desc">For time-sensitive concerns with upcoming hearings, expiring deadlines, or situations requiring immediate legal guidance.</p></div>
+    </div>
+    <div class="response-emphasis"><strong>Why does it take time?</strong> Attie's responses are not instant AI outputs. Every query is processed using AI-assisted legal research, reviewed and finalized by a licensed Philippine lawyer to ensure accuracy and consistency with applicable statutes, rules, and jurisprudence. The lawyer review is non-negotiable — it is what makes Attie reliable.<br><br><em style="color:var(--text-muted)">Ang bawat sagot ay sinusuri ng isang lisensyadong abogadong Pilipino bago ipadala — para masiguro na ito ay tama at naayon sa batas.</em></div>
+  </div>
+</section>
+
+<!-- 9. TOOLS & SERVICES -->
+<section id="services" style="max-width:1100px">
+  <p class="section-label reveal">Tools &amp; Services</p>
+  <h2 class="section-title reveal">Know What You Can <em>Do</em></h2>
+  <p class="section-body reveal">Most Filipinos do not act on their legal situations — not because they have no rights, but because they do not know what those rights are or where to start. Attie's tools are built to change that. Each one helps you understand your options, identify the right agency, and take the first step with confidence.</p>
+  <div class="svc-grid" style="margin-top:2.5rem">
+    <a href="deadline-calculator.html" class="svc-card reveal"><div class="svc-card-top"><div class="svc-icon">&#9878;&#65039;</div><div class="svc-live-dot"></div></div><div class="svc-title">Philippine Legal Deadline Calculator</div><div class="svc-situation">"Kailan ba dapat mag-file ng MR? Ilang araw na lang ang natitira?"</div><p class="svc-desc">Missing a legal deadline can permanently close your case — even if you are right. Compute exact filing deadlines under the Rules of Court, with Philippine holiday exclusions automatically applied.</p></a>
+    <a href="https://forms.gle/5HLrigHwL9BxziWs6" target="_blank" class="svc-card reveal"><div class="svc-card-top"><div class="svc-icon">&#128196;</div></div><div class="svc-title">Legal Form Generator</div><div class="svc-situation">"Kailangan ko ng demand letter pero hindi ko alam kung paano isulat."</div><p class="svc-desc">Generate demand letters, Motions for Reconsideration, barangay complaints, and small claims forms — structured correctly and grounded in the applicable rules.</p></a>
+    <a href="https://forms.gle/5HLrigHwL9BxziWs6" target="_blank" class="svc-card reveal"><div class="svc-card-top"><div class="svc-icon">&#127963;&#65039;</div></div><div class="svc-title">Small Claims Guide + Form Generator</div><div class="svc-situation">"May utang sa akin. Pwede ko bang i-sue nang hindi nagbabayad ng abogado?"</div><p class="svc-desc">The small claims court was designed so ordinary Filipinos can collect what they are owed without a lawyer. Know what to file, the fees, and what to expect on hearing day.</p></a>
+    <a href="https://forms.gle/5HLrigHwL9BxziWs6" target="_blank" class="svc-card reveal"><div class="svc-card-top"><div class="svc-icon">&#127968;</div></div><div class="svc-title">Landlord-Tenant Rights Checker</div><div class="svc-situation">"Pinalis ako ng may-ari nang wala mang abiso. Legal ba 'yun?"</div><p class="svc-desc">Illegal ejectment, utility cutoffs, lockouts, and withheld deposits are among the most common housing violations. Know whether what happened crosses a legal line — and what your next move is.</p></a>
+    <a href="https://forms.gle/5HLrigHwL9BxziWs6" target="_blank" class="svc-card reveal"><div class="svc-card-top"><div class="svc-icon">&#128119;</div></div><div class="svc-title">Employee Rights Checker</div><div class="svc-situation">"Tanggal ako bigla. Wala man lang separation pay na binigay."</div><p class="svc-desc">Illegal dismissal, forced resignation, missing 13th month pay, and withheld final pay affect millions of Filipino workers. Find out whether your employer violated the Labor Code.</p></a>
+    <a href="https://forms.gle/5HLrigHwL9BxziWs6" target="_blank" class="svc-card reveal"><div class="svc-card-top"><div class="svc-icon">&#128222;</div></div><div class="svc-title">Debt &amp; Collection Harassment Detector</div><div class="svc-situation">"Tinatawagan ang mga contacts ko at sinasabihan na may utang ako."</div><p class="svc-desc">Having a debt does not make harassment legal. Collection agents who threaten, shame, or contact your family are violating the law. Identify the violations and which agency to report them to.</p></a>
+    <a href="https://forms.gle/5HLrigHwL9BxziWs6" target="_blank" class="svc-card reveal"><div class="svc-card-top"><div class="svc-icon">&#127973;</div></div><div class="svc-title">HMO / Insurance Claims Checker</div><div class="svc-situation">"Tinanggihan ng HMO ang claim ko. Tapos na ba ang laban?"</div><p class="svc-desc">A denial from your HMO or insurance company is not the final word. The Insurance Commission has jurisdiction over these disputes — know what steps to take before accepting the denial.</p></a>
+    <a href="https://forms.gle/5HLrigHwL9BxziWs6" target="_blank" class="svc-card reveal"><div class="svc-card-top"><div class="svc-icon">&#128717;</div></div><div class="svc-title">Consumer Rights Complaint Generator</div><div class="svc-situation">"Binili ko ang produkto pero sira. Hindi nila tinatanggap para i-refund."</div><p class="svc-desc">The Consumer Act guarantees your right to a refund, replacement, or repair. Know which agency — DTI, FDA, or BSP — handles your complaint and generate a structured letter.</p></a>
+    <a href="https://forms.gle/5HLrigHwL9BxziWs6" target="_blank" class="svc-card reveal"><div class="svc-card-top"><div class="svc-icon">&#9992;&#65039;</div></div><div class="svc-title">OFW Contract Red Flag Checker</div><div class="svc-situation">"Ang layo na. Nagbabago na ang kontrata dito sa ibang bansa."</div><p class="svc-desc">Know what POEA protections must be in your contract before you sign — and what your rights are if those terms are violated abroad.</p></a>
+    <a href="https://forms.gle/5HLrigHwL9BxziWs6" target="_blank" class="svc-card reveal"><div class="svc-card-top"><div class="svc-icon">&#129309;</div></div><div class="svc-title">Barangay Complaint Guide</div><div class="svc-situation">"Gusto ko mag-reklamo sa kapitbahay ko. Saan ba dapat pumunta?"</div><p class="svc-desc">Most disputes between neighbors must go through barangay conciliation first. Know the process, what to bring, and what to do if conciliation fails.</p></a>
+    <a href="https://forms.gle/5HLrigHwL9BxziWs6" target="_blank" class="svc-card reveal"><div class="svc-card-top"><div class="svc-icon">&#9889;</div></div><div class="svc-title">Cyberlibel Checker</div><div class="svc-situation">"May nag-post ng kasinungalingan tungkol sa akin online."</div><p class="svc-desc">Being defamed online is a criminal offense under RA 10175 — but not every post qualifies. Know whether what happened meets the legal elements and how to file with the NBI Cybercrime Division.</p></a>
+    <a href="https://forms.gle/5HLrigHwL9BxziWs6" target="_blank" class="svc-card reveal"><div class="svc-card-top"><div class="svc-icon">&#127962;</div></div><div class="svc-title">HSAC / Condo &amp; HOA Dispute Guide</div><div class="svc-situation">"Ang HOA namin ay nangongolekta ng dues pero walang ginagawa."</div><p class="svc-desc">Condo corporations and homeowners associations are not above the law. The HSAC has jurisdiction — most unit owners never know they can file a complaint there.</p></a>
+    <a href="https://forms.gle/5HLrigHwL9BxziWs6" target="_blank" class="svc-card reveal"><div class="svc-card-top"><div class="svc-icon">&#127891;</div></div><div class="svc-title">School &amp; University Dispute Guide</div><div class="svc-situation">"Pina-alis ang anak ko sa eskwelahan nang walang malinaw na dahilan."</div><p class="svc-desc">Schools cannot expel or suspend students arbitrarily. CHED has a complaints process most parents never use. Know what protection exists before it is too late.</p></a>
+    <a href="https://forms.gle/5HLrigHwL9BxziWs6" target="_blank" class="svc-card reveal"><div class="svc-card-top"><div class="svc-icon">&#128241;</div></div><div class="svc-title">Online Lending App Abuse Checker</div><div class="svc-situation">"Tinatawagan ng lending app ang lahat ng contacts ko."</div><p class="svc-desc">Accessing your contacts, posting your photos, and shaming you publicly are illegal — regardless of whether you owe money. Know which agency regulates your lending app.</p></a>
+    <a href="https://forms.gle/5HLrigHwL9BxziWs6" target="_blank" class="svc-card reveal"><div class="svc-card-top"><div class="svc-icon">&#128230;</div></div><div class="svc-title">E-Commerce Scam Complaint Generator</div><div class="svc-situation">"Na-scam ako sa Shopee / Lazada / Facebook Marketplace."</div><p class="svc-desc">Know whether to escalate to DTI, NBI Cybercrime, or PNP — and generate a structured complaint letter addressed to the right agency in one step.</p></a>
+    <a href="https://forms.gle/5HLrigHwL9BxziWs6" target="_blank" class="svc-card reveal"><div class="svc-card-top"><div class="svc-icon">&#128272;</div></div><div class="svc-title">Data Privacy Violation Checker</div><div class="svc-situation">"Ginagamit ng employer ko ang aking impormasyon nang wala akong pahintulot."</div><p class="svc-desc">The Data Privacy Act gives every Filipino the right to control their personal information. Know how to file a complaint with the National Privacy Commission.</p></a>
+    <a href="https://forms.gle/5HLrigHwL9BxziWs6" target="_blank" class="svc-card reveal"><div class="svc-card-top"><div class="svc-icon">&#9888;&#65039;</div></div><div class="svc-title">Online Investment Scam Reporter</div><div class="svc-situation">"Nag-invest ako sa online na negosyo. Ngayon, hindi na makuha ang pera."</div><p class="svc-desc">Know whether what happened is a Ponzi, pyramid, or unregistered securities scheme — and how to file with the SEC before the trail goes cold.</p></a>
+    <a href="https://forms.gle/5HLrigHwL9BxziWs6" target="_blank" class="svc-card reveal"><div class="svc-card-top"><div class="svc-icon">&#128100;</div></div><div class="svc-title">Fake Account / Identity Theft Guide</div><div class="svc-situation">"May fake account na gumagamit ng pangalan at litrato ko."</div><p class="svc-desc">Know how to preserve evidence, report to PNP Cybercrime and NBI, and submit platform takedown requests — in the right order, before evidence is deleted.</p></a>
+    <a href="https://forms.gle/5HLrigHwL9BxziWs6" target="_blank" class="svc-card reveal"><div class="svc-card-top"><div class="svc-icon">&#128444;&#65039;</div></div><div class="svc-title">Unauthorized Photo / Content Use Checker</div><div class="svc-situation">"Ginamit ng ibang tao ang aking litrato nang walang pahintulot."</div><p class="svc-desc">Your photos and creative work are protected by law. Know your remedies under the IP Code and the Data Privacy Act when someone uses them without permission.</p></a>
+    <a href="https://forms.gle/5HLrigHwL9BxziWs6" target="_blank" class="svc-card reveal"><div class="svc-card-top"><div class="svc-icon">&#128187;</div></div><div class="svc-title">Remote Work &amp; Freelancer Dispute Guide</div><div class="svc-situation">"Hindi binayaran ng client ko. Saan ba ako dapat mag-reklamo?"</div><p class="svc-desc">Know whether NLRC or regular courts have jurisdiction over your dispute — and what documents to gather before you file.</p></a>
+    <a href="https://forms.gle/5HLrigHwL9BxziWs6" target="_blank" class="svc-card reveal"><div class="svc-card-top"><div class="svc-icon">&#128179;</div></div><div class="svc-title">Buy Now Pay Later / Fintech Dispute Checker</div><div class="svc-situation">"May na-charge sa GCash / BNPL ko na hindi ko ginawa."</div><p class="svc-desc">Unauthorized charges, hidden fees, and illegal interest rates on fintech platforms are a growing problem. The BSP Consumer Protection framework covers you — know how to use it.</p></a>
+    <a href="https://forms.gle/5HLrigHwL9BxziWs6" target="_blank" class="svc-card reveal"><div class="svc-card-top"><div class="svc-icon">&#128242;</div></div><div class="svc-title">Digital Estate &amp; Account Access Guide</div><div class="svc-situation">"Namatay ang kamag-anak ko. Paano makukuha ang pera sa GCash niya?"</div><p class="svc-desc">Know what documents courts and platforms require before heirs can access GCash, bank apps, and crypto wallets.</p></a>
+    <a href="https://forms.gle/5HLrigHwL9BxziWs6" target="_blank" class="svc-card reveal"><div class="svc-card-top"><div class="svc-icon">&#127959;&#65039;</div></div><div class="svc-title">Corporation Registration Checklist</div><div class="svc-situation">"Gusto kong mag-register ng company sa SEC pero hindi ko alam kung saan magsisimula."</div><p class="svc-desc">Get a complete SEC registration checklist for OPC, stock, or non-stock corporations — so you arrive prepared, not turned away for a missing document.</p></a>
+    <a href="https://forms.gle/5HLrigHwL9BxziWs6" target="_blank" class="svc-card reveal"><div class="svc-card-top"><div class="svc-icon">&#128203;</div></div><div class="svc-title">Annual GIS Filing Guide</div><div class="svc-situation">"Nakalimutan naming mag-file ng GIS. Magkano na ang multa?"</div><p class="svc-desc">The GIS is the most commonly missed SEC deadline — penalties compound fast. Know your exact due date, what to include, and how to file electronically.</p></a>
+    <a href="https://forms.gle/5HLrigHwL9BxziWs6" target="_blank" class="svc-card reveal"><div class="svc-card-top"><div class="svc-icon">&#128197;</div></div><div class="svc-title">BIR Deadline Calendar Generator</div><div class="svc-situation">"Lagi akong na-penalty sa BIR dahil nalilimutan ko ang mga deadline."</div><p class="svc-desc">Generate a personalized BIR compliance calendar based on your registered tax types — monthly, quarterly, and annual filings so no deadline catches you off guard.</p></a>
+    <a href="https://forms.gle/5HLrigHwL9BxziWs6" target="_blank" class="svc-card reveal"><div class="svc-card-top"><div class="svc-icon">&#128269;</div></div><div class="svc-title">BIR Form Finder</div><div class="svc-situation">"Anong BIR form ang gagamitin ko para dito?"</div><p class="svc-desc">Describe what you need to file in plain language — get the exact BIR form number, where to file it, and when it is due. No guessing.</p></a>
+    <a href="https://forms.gle/5HLrigHwL9BxziWs6" target="_blank" class="svc-card reveal"><div class="svc-card-top"><div class="svc-icon">&#127978;</div></div><div class="svc-title">DTI Business Registration Guide</div><div class="svc-situation">"Gusto kong mag-negosyo. Kailangan ko bang mag-register sa DTI?"</div><p class="svc-desc">Get the complete guide: documents, fees, and what happens if your DTI registration lapses before renewal.</p></a>
+    <a href="https://forms.gle/5HLrigHwL9BxziWs6" target="_blank" class="svc-card reveal"><div class="svc-card-top"><div class="svc-icon">&#128084;</div></div><div class="svc-title">DOLE Employer Compliance Checklist</div><div class="svc-situation">"May inspection ang DOLE sa aming negosyo. Handa ba kami?"</div><p class="svc-desc">Know what obligations apply to your business size and industry — before the DOLE inspector arrives at your door.</p></a>
+    <a href="https://forms.gle/5HLrigHwL9BxziWs6" target="_blank" class="svc-card reveal"><div class="svc-card-top"><div class="svc-icon">&#128737;&#65039;</div></div><div class="svc-title">SSS / PhilHealth / Pag-IBIG Employer Guide</div><div class="svc-situation">"Nagtatanong ang mga empleyado ko kung bakit hindi pa naka-remit ang contributions nila."</div><p class="svc-desc">Get the correct remittance schedule, contribution rates, and electronic filing instructions for all three agencies — before late remittances turn into penalties.</p></a>
+    <a href="https://forms.gle/5HLrigHwL9BxziWs6" target="_blank" class="svc-card reveal"><div class="svc-card-top"><div class="svc-icon">&#127760;</div></div><div class="svc-title">PEZA / BOI Incentives Eligibility Checker</div><div class="svc-situation">"May paraan ba para makatipid sa taxes ang aming negosyo nang legal?"</div><p class="svc-desc">PEZA and BOI incentives under the CREATE Act are among the most underutilized benefits for qualifying Philippine businesses. Find out if yours qualifies.</p></a>
+  </div>
+  <div class="svc-disclaimer-banner reveal">
+    <p><strong>Important:</strong> All tools and outputs on this platform are for general informational purposes only and do not constitute legal advice. Results may be incomplete or contain errors — always double-check, verify with official sources, and consult a qualified lawyer before taking any legal action. Attie and its creators assume no liability for errors or reliance on any tool output.</p>
+  </div>
+</section>
+
+<!-- 10. CONTACT -->
+<section id="contact">
+  <p class="section-label reveal">Get In Touch</p>
+  <h2 class="section-title reveal">Contact <em>Us</em></h2>
+  <p class="section-body reveal">For general inquiries about our service before submitting a query.</p>
+  <div class="contact-box reveal" style="text-align:center">
+    <button class="btn-primary" id="revealBtn" onclick="revealContact()">Show Contact Details</button>
+    <div id="contactDetails" style="display:none">
+      <div class="contact-details" style="margin-top:1.5rem">
+        <div class="contact-item"><div class="contact-item-label">Email</div><div class="contact-item-value">attie.dlo.ph@gmail.com</div></div>
+        <div class="contact-item"><div class="contact-item-label">Contact Number</div><div class="contact-item-value">0998 857 8171</div></div>
+        <div class="contact-item"><div class="contact-item-label">Facebook</div><div class="contact-item-value"><a href="https://www.facebook.com/profile.php?id=61583574324732" target="_blank" style="color:var(--green);text-decoration:none">Attie — Digital Law Office</a></div></div>
+      </div>
+      <p class="contact-note">For general inquiries only. To submit a legal query, please use the query form above.<br><em>Para sa mga pangkalahatang katanungan lamang. Para sa legal na query, gamitin ang form sa itaas.</em></p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-logo">Attie</div>
+  <div class="footer-tagline">Your Digital Law Office · Philippines</div>
+  <ul class="footer-links">
+    <li><a href="#why">Why Attie</a></li>
+    <li><a href="#areas">Practice Areas</a></li>
+    <li><a href="#services">Tools &amp; Services</a></li>
+    <li><a href="#query">Submit a Query</a></li>
+    <li><a href="#fees">Fees</a></li>
+    <li><a href="#response">Response Time</a></li>
+    <li><a href="#contact">Contact Us</a></li>
+  </ul>
+  <p class="footer-disclaimer">Attie provides AI-assisted legal information reviewed by a licensed Philippine lawyer. Responses are not formal legal advice, do not constitute a legal opinion or recommendation, and do not create an attorney-client relationship. The purpose of this service is to steer you in the right direction — not to substitute formal legal representation. Responses are not conclusive or final and may change depending on facts and circumstances not fully known at the time of the query. All information shared with Attie is kept strictly confidential.</p>
+  <p class="footer-copy">© 2026 Attie Digital Law Office. All rights reserved.</p>
+</footer>
+
+<script>
+  function scrollToServices(){
+    var el=document.getElementById('services');
+    if(el){el.scrollIntoView({behavior:'smooth',block:'start'})}
+  }
+  function toggleMenu(){var m=document.getElementById('mobileMenu');var h=document.getElementById('hamburger');m.classList.toggle('open');h.classList.toggle('open')}
+  function revealContact(){document.getElementById('contactDetails').style.display='block';document.getElementById('contactDetails').style.animation='fadeUp 0.5s forwards';document.getElementById('revealBtn').style.display='none'}
+  window.addEventListener('scroll',function(){var pct=(window.scrollY/(document.body.scrollHeight-window.innerHeight))*100;document.getElementById('scrollLine').style.width=pct+'%'});
+  var observer=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting)e.target.classList.add('visible')})},{threshold:0.1});
+  document.querySelectorAll('.reveal').forEach(function(el){observer.observe(el)});
+  function toggleTheme(){var html=document.documentElement;var isDark=html.getAttribute('data-theme')==='dark';html.setAttribute('data-theme',isDark?'light':'dark');document.getElementById('themeIcon').textContent=isDark?'🌙':'☀️';localStorage.setItem('attie-theme',isDark?'light':'dark')}
+  var savedTheme=localStorage.getItem('attie-theme');if(savedTheme){document.documentElement.setAttribute('data-theme',savedTheme);document.getElementById('themeIcon').textContent=savedTheme==='light'?'🌙':'☀️'}
+  var currentSlide=1;var totalSlides=5;var slideTimer;
+  function goToSlide(n){document.getElementById('slide'+currentSlide).classList.remove('active');document.querySelectorAll('.slide-dot')[currentSlide-1].classList.remove('active');currentSlide=n;document.getElementById('slide'+currentSlide).classList.add('active');document.querySelectorAll('.slide-dot')[currentSlide-1].classList.add('active');resetTimer()}
+  function nextSlide(){goToSlide(currentSlide===totalSlides?1:currentSlide+1)}
+  function resetTimer(){clearInterval(slideTimer);slideTimer=setInterval(nextSlide,15000)}
+  slideTimer=setInterval(nextSlide,15000);
+  var tIdx=0;var tTotal=6;var tTimer;
+  function teaserRender(){document.getElementById('teaserTrack').style.transform='translateX(-'+tIdx+'00%)';document.querySelectorAll('.teaser-dot').forEach(function(d,i){d.classList.toggle('active',i===tIdx)})}
+  function teaserGo(n){tIdx=n;teaserRender();teaserResetTimer()}
+  function teaserMove(dir){tIdx=(tIdx+dir+tTotal)%tTotal;teaserRender();teaserResetTimer()}
+  function teaserResetTimer(){clearInterval(tTimer);tTimer=setInterval(function(){tIdx=(tIdx+1)%tTotal;teaserRender()},5000)}
+  tTimer=setInterval(function(){tIdx=(tIdx+1)%tTotal;teaserRender()},5000);
+</script>
 </body>
 </html>
