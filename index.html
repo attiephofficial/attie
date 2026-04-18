@@ -36,8 +36,50 @@
     .contact-card{padding:1rem 1.2rem}.contact-compact{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:center}.contact-line{font-size:.82rem;line-height:1.45;color:var(--text-muted);white-space:nowrap}.contact-line strong{color:var(--heading);font-weight:600;margin-right:4px}.contact-sep{color:var(--gold);opacity:.8;font-size:.74rem}
     footer{padding:54px 0 48px;border-top:1px solid var(--hairline)}.footer-brand{display:flex;justify-content:center;margin-bottom:.5rem}.footer-logo-svg{width:150px;height:auto;display:block;overflow:visible}.footer-tagline{font-family:'Fredoka',sans-serif;font-size:.78rem;letter-spacing:.24em;text-transform:uppercase;color:var(--text-muted);text-align:center;margin-bottom:1.3rem;font-weight:500}.footer-text{max-width:860px;margin:0 auto 1.4rem;color:var(--text-muted);text-align:center;font-size:.84rem;line-height:1.9}.footer-links{display:grid;grid-template-columns:repeat(3,auto);justify-content:center;gap:24px}.footer-links a{font-size:.84rem;color:var(--green-deep);font-weight:500}
     @media (max-width:1080px){.trust-grid{grid-template-columns:repeat(2,1fr)}.paired-showcase{grid-template-columns:1fr;gap:22px}.slideshow-card,.tool-feature-shell{min-height:unset}.split{grid-template-columns:1fr}.tools-scroll-shell{height:1180px}}
-    @media (max-width:980px){.nav-links{display:none}.menu-toggle{display:grid}.feature-grid,.steps-grid,.areas-grid,.tool-grid,.faq-grid{grid-template-columns:repeat(2,1fr)}.hero{min-height:auto;padding:6rem 0 4.2rem}section{padding:4.5rem 0}.contact-compact{display:grid;justify-content:stretch}.contact-sep{display:none}.tools-scroll-shell{height:1320px}}
-    @media (max-width:640px){.container{padding:0 16px}.trust-grid,.feature-grid,.steps-grid,.areas-grid,.tool-grid,.faq-grid,.response-grid,.footer-links{grid-template-columns:1fr}.hero{padding:5.4rem 0 3.8rem}.hero h1{font-size:2.2rem}.hero p{margin-bottom:1.3rem;font-size:1rem;line-height:1.72}.slideshow-card{padding:1.35rem}.tool-feature-shell{padding:1rem}.nav-inner{min-height:70px}.btn{min-width:unset;width:100%;padding:.98rem 1.2rem}.hero-cta{flex-direction:column;gap:10px}.section-intro{margin-bottom:2.2rem}.section-title{font-size:2rem}.tool-body,.area-card,.card,.faq-item{padding:1.2rem}.area-card[style]{grid-column:auto !important}.contact-line{white-space:normal}.footer-links{gap:14px}.tools-scroll-shell{height:2550px;max-height:2550px;padding:1rem;overflow-y:auto;overflow-x:hidden;background:var(--warm-wash);border:1px solid var(--border);box-shadow:var(--shadow-soft)}.tools-scroll-shell::before,.tools-scroll-shell::after{display:block}.brand-logo-svg{width:108px}.footer-logo-svg{width:138px}}
+    @media (max-width:980px){.nav-links{display:none}.menu-toggle{display:grid}.feature-grid,.steps-grid,.areas-grid,.tool-grid,.faq-grid{grid-template-columns:repeat(2,1fr)}.hero{min-height:auto;padding:6rem 0 4.2rem}section{padding:4.5rem 0}.contact-compact{display:grid;justify-content:stretch}.contact-sep{display:none}.tools-scroll-shell{height:1040px;width:min(74%,560px);margin:0 auto;border-radius:26px}}
+    @media (max-width:640px){
+      .container{padding:0 18px;max-width:100%}
+      main{padding:6px 0 14px}
+      .trust-grid,.feature-grid,.steps-grid,.areas-grid,.tool-grid,.faq-grid,.response-grid,.footer-links{grid-template-columns:1fr}
+      .nav{top:12px;left:0;right:0;width:min(92vw,360px);margin:0 auto;border:1px solid var(--border);border-radius:18px;box-shadow:0 10px 26px rgba(0,0,0,.07);background:rgba(245,241,232,.86)}
+      [data-theme="dark"] .nav{background:rgba(12,10,9,.86)}
+      .nav-inner{min-height:58px;padding:0 12px;gap:12px}
+      .theme-toggle,.menu-toggle{width:36px;height:36px}
+      .mobile-menu{padding:24px}.mobile-menu-inner{width:min(340px,100%);gap:12px}.mobile-menu a{padding:15px 16px;border-radius:16px}
+      .hero{padding:5rem 0 2.9rem;min-height:auto}
+      .hero-inner{max-width:362px;padding:0 4px}
+      .hero-logo-svg{width:min(326px,86vw)}
+      .hero h1{font-size:2rem;line-height:1.03;max-width:302px;margin-bottom:.9rem}
+      .hero p{max-width:300px;margin-bottom:1.25rem;font-size:.96rem;line-height:1.7}
+      .btn{min-width:unset;width:100%;padding:1rem 1.06rem;border-radius:12px}
+      .hero-cta{flex-direction:column;gap:10px;max-width:300px;margin:0 auto}
+      .section-divider{display:none}
+      section{padding:18px 0}
+      .section-intro{margin-bottom:1.45rem;max-width:320px}
+      .section-title{font-size:1.86rem;line-height:1.1;margin-bottom:12px}
+      .section-body{font-size:.93rem;line-height:1.7}
+      .card,.faq-item,.area-card,.contact-card,.notice-card,.pricing-card,.response-card,.slideshow-card,.tool-feature-shell{border-radius:22px;box-shadow:0 14px 30px rgba(0,0,0,.065)}
+      .tool-body,.area-card,.card,.faq-item{padding:1.16rem}
+      .paired-showcase,.split{grid-template-columns:1fr;gap:16px}
+      .feature-grid,.steps-grid,.areas-grid,.faq-grid,.response-grid{gap:14px}
+      .tool-grid{gap:14px}
+      .slideshow-card{padding:1.24rem 1.16rem}
+      .tool-feature-shell{padding:1rem}
+      .brand-logo-svg{width:108px}.footer-logo-svg{width:138px}
+      #why .container, #how .container, #who .container, #tools .container, #query .container, #pricing .container, #fit .container, #faq .container, #contact .container, footer .container{max-width:356px;margin:0 auto;padding:22px 18px;border:1px solid var(--border);border-radius:28px;background:linear-gradient(180deg, rgba(255,253,245,.8), rgba(240,234,216,.7));box-shadow:0 16px 38px rgba(0,0,0,.065)}
+      [data-theme="dark"] #why .container,[data-theme="dark"] #how .container,[data-theme="dark"] #who .container,[data-theme="dark"] #tools .container,[data-theme="dark"] #query .container,[data-theme="dark"] #pricing .container,[data-theme="dark"] #fit .container,[data-theme="dark"] #faq .container,[data-theme="dark"] #contact .container,[data-theme="dark"] footer .container{background:linear-gradient(180deg, rgba(23,20,15,.93), rgba(18,16,13,.89))}
+      .trust-grid{gap:14px;max-width:356px;margin:0 auto;padding-top:10px}
+      #top > section + hr + section,
+      #top > section + section,
+      footer{margin-top:10px}
+      .tools-scroll-shell{width:240px;max-width:240px;height:980px;max-height:980px;padding:10px;margin:8px auto 2px;border-radius:24px;overflow-y:auto;overflow-x:hidden;background:var(--warm-wash);border:1px solid var(--border);box-shadow:0 14px 32px rgba(0,0,0,.085)}
+      .tools-scroll-shell::before,.tools-scroll-shell::after{display:block}
+      .tool-card h3{font-size:1rem}.tool-card p,.tool-situation{font-size:.81rem;line-height:1.62}.tool-type{font-size:.6rem}.tool-link{font-size:.84rem}
+      .response-item{padding:1.02rem}
+      .price{font-size:2.22rem}
+      .notice-card{padding:1.18rem !important}
+      .footer-text{font-size:.8rem;line-height:1.72;margin-bottom:0}
+    }
   </style>
 </head>
 <body>
@@ -67,7 +109,7 @@
 <hr class="section-divider">
 <section id="contact"><div class="container"><div class="section-intro"><h2 class="section-title">Talk to <em>Attie</em>.</h2><p class="section-body">For quick answers about how it works, what to expect, or if this is right for you—reach out to us.</p></div><div class="contact-card"><div class="contact-compact"><div class="contact-line"><strong>Email:</strong> attie.dlo.ph@gmail.com</div><div class="contact-sep">•</div><div class="contact-line"><strong>Contact Number:</strong> 0998 857 8171</div><div class="contact-sep">•</div><div class="contact-line"><strong>Facebook:</strong> <a href="https://www.facebook.com/profile.php?id=61583574324732" target="_blank">Attie — Digital Law Office</a></div></div></div></div></section>
 </main>
-<footer><div class="container"><div class="footer-brand"><svg class="footer-logo-svg" viewBox="0 0 900 430" role="img" aria-label="Attie"><defs><linearGradient id="attieGradientFooter" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#1ad98a"/><stop offset="26%" stop-color="#22d487"/><stop offset="52%" stop-color="#26c6f2"/><stop offset="73%" stop-color="#76c99f"/><stop offset="88%" stop-color="#b1c65d"/><stop offset="100%" stop-color="#cfbb4d"/></linearGradient><filter id="softGlowFooter" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="8" result="blur"/><feColorMatrix in="blur" type="matrix" values="1 0 0 0 0  0 1 0 0 0.9  0 0 1 0 0.72  0 0 0 0.2 0" result="glow"/><feMerge><feMergeNode in="glow"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs><text x="50%" y="74%" text-anchor="middle" font-family="Pacifico, cursive" font-size="250" fill="url(#attieGradientFooter)" filter="url(#softGlowFooter)">Attie</text></svg></div><div class="footer-tagline">Your Digital Law Office · Philippines</div><p class="footer-text">Attie provides AI-assisted legal information reviewed by a lawyer. Content on this site and any response sent through the service is for general informational and educational purposes only, based on the facts shared by the user, and is not a substitute for individualized legal advice, a full legal opinion, or formal representation. Use of this site, submission of a form, payment, messaging, or receipt of a response does not by itself create an attorney-client relationship. An attorney-client relationship arises only after a lawyer expressly agrees to take on the engagement under Philippine law and professional rules. No outcome is guaranteed, users remain responsible for checking official deadlines, notices, filing requirements, and evidence, and urgent or high-risk matters should be brought directly to a qualified lawyer or the proper authority without delay.</p></div></footer>
+<footer><div class="container"><div class="footer-brand"><svg class="footer-logo-svg" viewBox="0 0 900 430" role="img" aria-label="Attie"><defs><linearGradient id="attieGradientFooter" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#1ad98a"/><stop offset="26%" stop-color="#22d487"/><stop offset="52%" stop-color="#26c6f2"/><stop offset="73%" stop-color="#76c99f"/><stop offset="88%" stop-color="#b1c65d"/><stop offset="100%" stop-color="#cfbb4d"/></linearGradient><filter id="softGlowFooter" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="8" result="blur"/><feColorMatrix in="blur" type="matrix" values="1 0 0 0 0  0 1 0 0 0.9  0 0 1 0 0.72  0 0 0 0.2 0" result="glow"/><feMerge><feMergeNode in="glow"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs><text x="50%" y="74%" text-anchor="middle" font-family="Pacifico, cursive" font-size="250" fill="url(#attieGradientFooter)" filter="url(#softGlowFooter)">Attie</text></svg></div><div class="footer-tagline">Your Digital Law Office · Philippines</div><p class="footer-text">Attie provides AI-assisted legal information reviewed by a licensed Philippine lawyer. All content and responses are for general informational and educational purposes only and do not constitute legal advice, a formal legal opinion, or legal representation.<br><br>Responses are based exclusively on the facts provided by the user at the time of inquiry. Factual circumstances may change, and any such change may materially affect the applicable analysis. No response should be treated as a final legal conclusion.<br><br>Use of this platform — including browsing, submitting a query, making payment, or receiving a response — does not establish an attorney-client relationship. No particular outcome is guaranteed. Users are responsible for independently verifying all applicable deadlines, notices, filing requirements, and evidentiary matters.</p></div></footer>
 <script>
 function setTheme(theme){document.documentElement.setAttribute('data-theme', theme);localStorage.setItem('attie-theme', theme);document.getElementById('themeIcon').textContent = theme==='dark' ? '☀️' : '🌙';}
 function toggleTheme(){const current=document.documentElement.getAttribute('data-theme')||'light';setTheme(current==='dark'?'light':'dark');}
